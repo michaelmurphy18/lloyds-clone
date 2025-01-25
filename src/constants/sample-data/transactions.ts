@@ -12,7 +12,7 @@ const sampleTransactions: Transaction[] = [
     payee: {
       name: "Salary",
       reference: "Monthly paycheck",
-      iconUrl: "https://example.com/icons/salary.png",
+      iconUrl: "https://picsum.photos/200",
     },
     category: "Income",
     notes: "January salary deposit.",
@@ -39,7 +39,7 @@ const sampleTransactions: Transaction[] = [
     payee: {
       name: "Supermarket",
       reference: "Groceries",
-      iconUrl: "https://example.com/icons/supermarket.png",
+      iconUrl: "https://picsum.photos/200",
     },
     category: "Shopping",
     notes: "Weekly grocery shopping.",

@@ -46,7 +46,13 @@ const TransactionAccountSummary = ({
           </Pressable>
         </Link>
 
-        <Link asChild href={"/"}>
+        <Link
+          asChild
+          href={{
+            pathname: "/(modals)/details/[accountId]",
+            params: { accountId: "001" },
+          }}
+        >
           <Pressable className="items-center gap-y-3 rounded-lg p-2 active:bg-black/10">
             <FontAwesome6 name="building-columns" size={20} color="black" />
             <Text className="text-sm">Account details</Text>

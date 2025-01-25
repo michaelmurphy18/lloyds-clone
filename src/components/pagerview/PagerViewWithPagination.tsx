@@ -1,9 +1,6 @@
-import {
-  useAnimatedPagerScrollHandler,
-  useAnimatedPagerSelectedPageHanlder,
-} from "@/hooks";
-import { PropsWithChildren, useState } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle, Text } from "react-native";
+import { useAnimatedPagerScrollHandler } from "@/hooks";
+import { PropsWithChildren } from "react";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import PagerView from "react-native-pager-view";
 import Animated, { useSharedValue } from "react-native-reanimated";
 import Pagination from "./Pagination";

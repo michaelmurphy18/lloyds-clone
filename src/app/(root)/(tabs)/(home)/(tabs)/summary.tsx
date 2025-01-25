@@ -22,7 +22,7 @@ const SummaryScreen = () => {
       <RedirectBanner
         title="Check your credit scrore"
         description="Congratulations - you've been registerd for Your Credit Score for a year"
-        icon={require("../../../../../assets/images/icon.png")}
+        icon={require("@assets/images/icon.png")}
         action="Check your Score"
       />
 
@@ -41,7 +41,7 @@ const SummaryScreen = () => {
           >
             <View className="flex-row items-center gap-x-3">
               <Image
-                source={require("../../../../../assets/images/icon.png")}
+                source={require("@assets/images/icon.png")}
                 style={styles.spaceImage}
               />
               <View className="flex-1 flex-col gap-y-2">

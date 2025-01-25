@@ -5,15 +5,15 @@ import {
 import { ReanimatedEvent, useEvent, useHandler } from "react-native-reanimated";
 
 export function useAnimatedPagerScrollHandler<
-  TContext extends Record<string, unknown>
+  TContext extends Record<string, unknown>,
 >(
   handlers: {
     onPageScroll: (
       e: ReanimatedEvent<PagerViewOnPageScrollEvent>,
-      context: TContext
+      context: TContext,
     ) => void;
   },
-  dependencies?: unknown[]
+  dependencies?: unknown[],
 ): (e: PagerViewOnPageScrollEvent) => void {
   const { context, doDependenciesDiffer } = useHandler<
     PagerViewOnPageScrollEvent,
@@ -30,20 +30,20 @@ export function useAnimatedPagerScrollHandler<
       }
     },
     ["onPageScroll"],
-    doDependenciesDiffer
+    doDependenciesDiffer,
   );
 }
 
-export function useAnimatedPagerSelectedPageHanlder<
-  TContext extends Record<string, unknown>
+export function useAnimatedPagerSelectedPageHandler<
+  TContext extends Record<string, unknown>,
 >(
   handlers: {
     onPageSelected: (
       e: ReanimatedEvent<PagerViewOnPageSelectedEvent>,
-      context: TContext
+      context: TContext,
     ) => void;
   },
-  dependencies?: Array<unknown>
+  dependencies?: unknown[],
 ): (e: PagerViewOnPageSelectedEvent) => void {
   const { context, doDependenciesDiffer } = useHandler<
     PagerViewOnPageSelectedEvent,
@@ -60,6 +60,6 @@ export function useAnimatedPagerSelectedPageHanlder<
       }
     },
     ["onPageSelected"],
-    doDependenciesDiffer
+    doDependenciesDiffer,
   );
 }

@@ -35,14 +35,14 @@ const AnimatedHeader = ({
     if (!height) return {};
 
     const translateY = interpolate(
-      scrollOffset.value,
+      -scrollOffset.value,
       [0, height / 2],
       [-50, 0],
       Extrapolation.CLAMP,
     );
 
     const opacity = interpolate(
-      scrollOffset.value,
+      -scrollOffset.value,
       [0, height / 2],
       [0, 1],
       Extrapolation.CLAMP,

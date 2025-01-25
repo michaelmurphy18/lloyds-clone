@@ -2,9 +2,16 @@ import { cn, formatCurrency } from "@/libs/utils";
 import { Transaction, TransactionSection } from "@/types";
 import { MaterialIcons } from "@expo/vector-icons";
 import React, { forwardRef } from "react";
-import { SectionList, SectionListProps, View, Text } from "react-native";
+import {
+  SectionList,
+  SectionListProps,
+  View,
+  Text,
+  Pressable,
+} from "react-native";
 import Animated, { AnimatedProps } from "react-native-reanimated";
 import { Image } from "expo-image";
+import { Link } from "expo-router";
 
 const AnimatedSectionList = Animated.createAnimatedComponent(
   SectionList<Transaction, TransactionSection>,
@@ -47,27 +54,37 @@ const TransactionSectionList = forwardRef<
           leadingItem && <View className="h-2" />
         }
         renderItem={({ item, index }) => (
-          <View className="relative flex-row items-center gap-x-2 bg-white p-4 active:bg-black/5">
-            <Image
-              source={require("@assets/images/icon.png")}
-              style={{ width: 50, height: 50, borderRadius: 100 }}
-            />
-            <Text className="text-lg">{item.payee.name}</Text>
-            <View className="flex-1" />
-            <View className="items-end gap-y-1">
-              <Text className={cn(item.type === "deposit" && "text-green-800")}>
-                <Text>{item.type === "deposit" ? "+ " : "- "}</Text>
-                <Text>{formatCurrency(Math.abs(item.amount))}</Text>
-              </Text>
-              <Text className="text-xs">
-                {formatCurrency(item.balanceAfter)}
-              </Text>
-            </View>
-            <MaterialIcons name="arrow-forward-ios" size={18} color="black" />
-            {item.type === "deposit" && (
-              <View className="absolute h-4/5 w-1 translate-y-1/2 bg-green-500" />
-            )}
-          </View>
+          <Link
+            asChild
+            href={{
+              pathname: "/(tabs)/(home)/transaction/[id]",
+              params: { id: item.id },
+            }}
+          >
+            <Pressable className="relative flex-row items-center gap-x-2 bg-white p-4 active:bg-black/5">
+              <Image
+                source={"https://picsum.photos/200"}
+                style={{ width: 50, height: 50, borderRadius: 100 }}
+              />
+              <Text className="text-lg">{item.payee.name}</Text>
+              <View className="flex-1" />
+              <View className="items-end gap-y-1">
+                <Text
+                  className={cn(item.type === "deposit" && "text-green-800")}
+                >
+                  <Text>{item.type === "deposit" ? "+ " : "- "}</Text>
+                  <Text>{formatCurrency(Math.abs(item.amount))}</Text>
+                </Text>
+                <Text className="text-xs">
+                  {formatCurrency(item.balanceAfter)}
+                </Text>
+              </View>
+              <MaterialIcons name="arrow-forward-ios" size={18} color="black" />
+              {item.type === "deposit" && (
+                <View className="absolute h-4/5 w-1 translate-y-1/2 rounded-sm bg-green-500" />
+              )}
+            </Pressable>
+          </Link>
         )}
       />
     );

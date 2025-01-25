@@ -2,21 +2,31 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import PagerView from "react-native-pager-view";
 import TransactionsSectionList from "./SectionList";
 import { Transaction, TransactionSection, TransactionTimeline } from "@/types";
-import {
+import Animated, {
   SharedValue,
+  runOnJS,
   useAnimatedProps,
   useAnimatedRef,
   useSharedValue,
   withSpring,
-  scrollTo,
 } from "react-native-reanimated";
 import { SectionList } from "react-native";
+import { useEffect, useRef } from "react";
+import {
+  useAnimatedPagerScrollHandler,
+  useAnimatedPagerSelectedPageHandler,
+} from "@/hooks";
+
+const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 type TransactionsViewPagerProps = {
   timeline: TransactionTimeline;
   sections: TransactionSection[];
   threshold: number;
   offset: SharedValue<number>;
+  selectedPage: (value: number) => void;
+  activePage: number;
+  position: (value: number) => void;
 };
 
 const TransactionsViewPager = ({
@@ -24,14 +34,39 @@ const TransactionsViewPager = ({
   sections,
   threshold,
   offset,
+  selectedPage,
+  position,
+  activePage,
 }: TransactionsViewPagerProps) => {
+  const viewPagerRef = useRef<PagerView>(null);
+
+  useEffect(() => {
+    viewPagerRef.current?.setPage(activePage);
+  }, [activePage]);
+
+  const pageScrollHandler = useAnimatedPagerScrollHandler({
+    onPageScroll: (e) => {
+      "worklet";
+
+      runOnJS(position)(e.offset + e.position);
+    },
+  });
+
+  const pageSelectedHandler = useAnimatedPagerSelectedPageHandler({
+    onPageSelected: (e) => {
+      "worklet";
+
+      runOnJS(selectedPage)(e.position);
+    },
+  });
+
   const listRef =
     useAnimatedRef<SectionList<Transaction, TransactionSection>>();
 
   const scrollOffset = useSharedValue(0);
-  const isPanning = useSharedValue(true);
   const context = useSharedValue({ y: 0 });
 
+  // !Todo: Fix this, buggy and laggy
   const panGesture = Gesture.Pan()
     .onStart(() => {
       context.value = { y: offset.value };
@@ -47,25 +82,18 @@ const TransactionsViewPager = ({
         // We're still in the pan phase
         offset.value = newValue;
       } else {
-        // We've passed the threshold, maintain threshold position
+        // Transition from panning to scrolling
         offset.value = -threshold;
 
-        // Calculate how much we should scroll
         const exceededOffset = -(newValue + threshold);
 
         if (exceededOffset > 0) {
-          // Apply the excess movement to scroll
-          console.log(scrollOffset.value, exceededOffset);
-
-          scrollTo(listRef, 0, scrollOffset.value + exceededOffset, false);
-
-          scrollOffset.value += exceededOffset;
+          scrollOffset.value = exceededOffset;
+          context.value = { y: -threshold }; // Reset context to avoid jumps
         }
       }
     })
     .onEnd(() => {
-      isPanning.value = false;
-
       if (offset.value > -threshold / 2) {
         offset.value = withSpring(0, {
           damping: 20,
@@ -77,28 +105,38 @@ const TransactionsViewPager = ({
           stiffness: 90,
         });
       }
-    });
+    })
+    .requireExternalGestureToFail(viewPagerRef);
 
   const scrollGesture = Gesture.Native();
 
-  const composed = Gesture.Simultaneous(panGesture, scrollGesture);
+  const composed = Gesture.Race(panGesture, scrollGesture);
 
   const animatedProps = useAnimatedProps(() => {
     return {
-      scrollEnabled: true,
+      scrollEnabled: offset.value <= -threshold,
+      contentOffset: { x: 0, y: scrollOffset.value },
     };
   });
 
   return (
     <GestureDetector gesture={composed}>
-      <PagerView
-        layoutDirection="rtl"
+      <AnimatedPagerView
+        onPageScroll={pageScrollHandler}
+        onPageSelected={pageSelectedHandler}
+        ref={viewPagerRef}
         style={{
           flex: 1,
+          transform: [
+            {
+              scaleX: -1,
+            },
+          ],
         }}
       >
         {timeline.map((month, index) => (
           <TransactionsSectionList
+            style={{ transform: [{ scaleX: -1 }] }}
             sections={sections}
             key={month}
             animatedProps={animatedProps}
@@ -107,7 +145,7 @@ const TransactionsViewPager = ({
             // onScroll={scrollHandler}
           />
         ))}
-      </PagerView>
+      </AnimatedPagerView>
     </GestureDetector>
   );
 };

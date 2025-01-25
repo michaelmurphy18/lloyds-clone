@@ -21,3 +21,26 @@ export function formatCurrency(value: number) {
 
   return formatter.format(value);
 }
+
+export const sortCodeFormatter = (value: string) => {
+  const cleaned = value.replace(/\D/g, "");
+
+  const formatted = cleaned.match(/.{1,2}/g)?.join("-") || "";
+
+  return formatted;
+};
+
+export const formatDate = (
+  date: Date,
+  localisation?: string,
+  options?: Intl.DateTimeFormatOptions,
+) => {
+  return date.toLocaleDateString(
+    localisation || "en-GB",
+    options || {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    },
+  );
+};

@@ -1,0 +1,124 @@
+import { Pressable, Text, View } from "react-native";
+
+import { AntDesign, Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { NativeStackHeaderProps } from "@react-navigation/native-stack";
+import { Link, useRouter } from "expo-router";
+import { cn } from "@/libs/utils";
+import { Button } from "../ui";
+
+type HeaderProps = {
+  showMessage?: boolean;
+  showUser?: boolean;
+  showSupport?: boolean;
+  showClose?: boolean;
+  showBack?: boolean;
+  showCall?: boolean;
+  textCenter?: boolean;
+  title?: string;
+  className?: string;
+  useSafeArea?: boolean;
+} & NativeStackHeaderProps;
+
+const Header = ({
+  showMessage = false,
+  showUser = false,
+  showSupport = false,
+  showClose = false,
+  showBack = false,
+  showCall = false,
+  textCenter = false,
+  title: titleFromProps,
+  route,
+  options,
+  className,
+  useSafeArea = true,
+}: HeaderProps) => {
+  const { top } = useSafeAreaInsets();
+
+  const router = useRouter();
+
+  const routeName = route.name;
+  let title = titleFromProps ? titleFromProps : options.title || routeName;
+
+  const renderIcon = ({
+    icon: IconComponent,
+    name,
+    size = 22,
+    action,
+  }: {
+    icon: any;
+    name: string;
+    size?: number;
+    action?: () => void;
+  }) => (
+    <Button variant="ghost" size="icon" onPress={action}>
+      <IconComponent name={name} size={size} color="black" />
+    </Button>
+  );
+
+  return (
+    <View
+      className={cn(
+        "flex flex-row items-center justify-between gap-x-3 px-2 pb-2",
+        className,
+      )}
+      style={{ paddingTop: useSafeArea ? top : 16 }}
+    >
+      <View className="gap-x-5">
+        {showBack &&
+          renderIcon({
+            icon: Ionicons,
+            name: "arrow-back",
+            action: () => router.back(),
+          })}
+
+        {showMessage && renderIcon({ icon: Feather, name: "mail" })}
+      </View>
+
+      <Text
+        className={cn(
+          "flex-1 text-lg font-semibold",
+          textCenter ? "text-center" : "text-left",
+        )}
+      >
+        {title}
+      </Text>
+
+      {/* <View className="flex-1" /> */}
+      <View className="flex-row gap-x-5">
+        {(!showClose || !showSupport || !showUser || !showCall) && (
+          <View className="w-6" />
+        )}
+
+        {showClose && (
+          <Link asChild href="../">
+            {renderIcon({
+              icon: AntDesign,
+              name: "close",
+            })}
+          </Link>
+        )}
+
+        {showSupport && (
+          <Link href="/support" asChild>
+            {renderIcon({
+              icon: AntDesign,
+              name: "questioncircleo",
+            })}
+          </Link>
+        )}
+
+        {showUser && renderIcon({ icon: FontAwesome5, name: "user-cog" })}
+
+        {showCall &&
+          renderIcon({
+            icon: Ionicons,
+            name: "call",
+          })}
+      </View>
+    </View>
+  );
+};
+
+export default Header;

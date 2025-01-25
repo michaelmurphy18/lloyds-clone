@@ -1,6 +1,6 @@
 import { cn } from "@/libs/utils";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Pressable, Text, ScrollView, LayoutChangeEvent } from "react-native";
 
 const TopBarItem = ({
@@ -12,26 +12,29 @@ const TopBarItem = ({
   const scrollViewRef = useRef<ScrollView>(null);
   const [tabWidths, setTabWidths] = useState<number[]>([]);
 
+  const scrollToFocusedTab = useCallback(
+    (index: number) => {
+      if (tabWidths.length === 0) return;
+
+      // Calculate the offset for the focused tab
+      const offset = tabWidths
+        .slice(0, index)
+        .reduce((acc, width) => acc + width, 0);
+
+      scrollViewRef.current?.scrollTo({
+        x: offset - 56 * 2, //* adjust the offset with padding and gap from scrollview
+        animated: true,
+      });
+    },
+    [tabWidths],
+  );
+
   useEffect(() => {
     // Scroll to the currently focused tab when the component renders
     if (tabWidths.length > 0) {
       scrollToFocusedTab(state.index);
     }
-  }, [state.index, tabWidths]);
-
-  const scrollToFocusedTab = (index: number) => {
-    if (tabWidths.length === 0) return;
-
-    // Calculate the offset for the focused tab
-    const offset = tabWidths
-      .slice(0, index)
-      .reduce((acc, width) => acc + width, 0);
-
-    scrollViewRef.current?.scrollTo({
-      x: offset - 56 * 2, //* adjust the offset with padding and gap from scrollview
-      animated: true,
-    });
-  };
+  }, [scrollToFocusedTab, state.index, tabWidths]);
 
   const handleTabLayout = (event: LayoutChangeEvent, index: number) => {
     const { width } = event.nativeEvent.layout;
@@ -74,14 +77,14 @@ const TopBarItem = ({
             onPress={onPress}
             onLayout={(event) => handleTabLayout(event, index)}
             className={cn(
-              "border border-black rounded-2xl px-7 py-2",
-              isFocused && "bg-black"
+              "rounded-2xl border border-black px-7 py-2",
+              isFocused && "bg-black",
             )}
           >
             <Text
               className={cn(
-                "text-lg capitalize font-semibold",
-                isFocused && "text-white"
+                "text-lg font-semibold capitalize",
+                isFocused && "text-white",
               )}
             >
               {label}

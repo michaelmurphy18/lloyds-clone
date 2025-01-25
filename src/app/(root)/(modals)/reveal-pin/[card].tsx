@@ -36,7 +36,7 @@ export default function ViewPINModal() {
     }, 1000); // times out after 1 second
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [router]);
 
   return (
     <View className="mb-10 flex-1 px-4 py-5">
@@ -44,7 +44,9 @@ export default function ViewPINModal() {
         options={{
           title: "View PIN",
           headerStyle: { backgroundColor: "red" },
-          header: (props) => <Header showClose title="View PIN" {...props} />,
+          header: (props) => (
+            <Header useSafeArea={false} showClose title="View PIN" {...props} />
+          ),
         }}
       />
 

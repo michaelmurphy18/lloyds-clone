@@ -1,26 +1,19 @@
 import {
   TransactionsAccountSummary,
   TransactionsFilterView,
-  TransactionsSectionList,
   TransactionsTabBar,
   TransactionsViewPager,
 } from "@/components/Transactions";
 import { AnimatedHeader } from "@/components/headers";
 import { useDimensions, useTransactions } from "@/hooks";
-import { Transaction, TransactionSection } from "@/types";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { SectionList, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import PagerView from "react-native-pager-view";
+import { useState } from "react";
+import { View } from "react-native";
 import Animated, {
   Extrapolation,
   interpolate,
-  scrollTo,
-  useAnimatedProps,
-  useAnimatedRef,
   useAnimatedStyle,
   useSharedValue,
-  withSpring,
 } from "react-native-reanimated";
 
 const Page = () => {
@@ -32,6 +25,9 @@ const Page = () => {
     useDimensions();
 
   const offset = useSharedValue(0);
+  const vPPosition = useSharedValue(0);
+  const vPSelectedPage = useSharedValue(0);
+  const [activePage, setActivePage] = useState(0);
 
   const animatedSummaryStyle = useAnimatedStyle(() => {
     if (!layout) return {};
@@ -114,17 +110,27 @@ const Page = () => {
         onLayout={onContainerLayout}
         style={[{ flex: 1 }, animatedContainerStyle]}
       >
-        <TransactionsTabBar timeline={timeline} />
+        <TransactionsTabBar
+          timeline={timeline}
+          position={vPPosition}
+          selectedPage={vPSelectedPage}
+          setActivePage={setActivePage}
+        />
 
         {/* Filter */}
         <TransactionsFilterView filter={filterTransactions} />
 
-        <TransactionsViewPager
-          timeline={timeline}
-          sections={sections}
-          threshold={layout?.height ?? 0} //need to change
-          offset={offset}
-        />
+        {layout && (
+          <TransactionsViewPager
+            timeline={timeline}
+            sections={sections}
+            threshold={layout.height} //need to change
+            offset={offset}
+            selectedPage={vPSelectedPage.set}
+            position={vPPosition.set}
+            activePage={activePage}
+          />
+        )}
       </Animated.View>
     </View>
   );

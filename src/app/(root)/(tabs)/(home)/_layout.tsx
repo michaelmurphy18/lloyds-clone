@@ -18,6 +18,12 @@ export default function HomeLayout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="transaction"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
