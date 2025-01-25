@@ -50,7 +50,7 @@ const LCBankCardWithFlip = ({
               easing: Easing.linear,
             });
           }
-        }
+        },
       );
     } else if (rotation.value === 180) {
       rotation.value = withTiming(
@@ -68,7 +68,7 @@ const LCBankCardWithFlip = ({
               easing: Easing.linear,
             });
           }
-        }
+        },
       );
     }
   }, [flip]);
@@ -100,17 +100,17 @@ const LCBankCardWithFlip = ({
 
   return (
     <View
-      className={cn("flex-col items-center w-full h-full gap-y-3", className)}
+      className={cn("h-full w-full flex-col items-center gap-y-3", className)}
       {...props}
     >
       <Animated.View
         style={animatedStyle}
-        className="bg-green-500 relative w-[90%] aspect-card rounded-xl p-4 justify-between shadow shadow-gray-400"
+        className="relative aspect-card w-[90%] justify-between rounded-xl bg-green-500 p-4 shadow shadow-gray-400"
       >
-        <Text className="absolute right-4 top-4 capitalize font-semibold px-4 py-2 bg-black/80 text-white rounded-full">
+        <Text className="absolute right-4 top-4 rounded-full bg-black/80 px-4 py-2 font-semibold capitalize text-white">
           {accountType}
         </Text>
-        <Text className="uppercase font-semibold text-lg">Lloyds bank</Text>
+        <Text className="text-lg font-semibold uppercase">Lloyds bank</Text>
 
         <View className="flex-row items-end justify-between">
           {showBack ? (
@@ -141,7 +141,7 @@ const LCBankCardWithFlip = ({
               </View>
             </View>
           ) : (
-            <Text className="uppercase font-light text-sm">
+            <Text className="text-sm font-light uppercase">
               {accountNumber}
             </Text>
           )}

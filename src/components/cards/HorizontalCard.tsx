@@ -20,21 +20,21 @@ const HorizontalCard = ({
     <Link href={href} asChild>
       <Pressable
         className={cn(
-          "p-4 flex-row rounded-xl bg-white gap-x-3 overflow-hidden active:bg-gray-200",
-          !badge && "items-center"
+          "flex-row gap-x-3 overflow-hidden rounded-xl bg-white p-4 active:bg-gray-200",
+          !badge && "items-center",
         )}
       >
         <Image
-          source={require("../../../assets/images/icon.png")}
+          source={require("@assets/images/icon.png")}
           style={styles.imageStyle}
         />
-        <View className="gap-y-1 flex-1">
+        <View className="flex-1 gap-y-1">
           <Text>{title}</Text>
-          <Text className="text-gray-600 text-sm">{caption}</Text>
+          <Text className="text-sm text-gray-600">{caption}</Text>
         </View>
         {badge ? (
           <View>
-            <Text className="uppercase px-4 py-1 h-fit rounded-full bg-green-200 text-xs">
+            <Text className="h-fit rounded-full bg-green-200 px-4 py-1 text-xs uppercase">
               53 New
             </Text>
           </View>

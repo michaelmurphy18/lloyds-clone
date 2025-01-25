@@ -1,10 +1,10 @@
 import { Redirect, Stack } from "expo-router";
 
 const Layout = () => {
-  const authenticated = true;
+  const authenticated = false;
 
   if (authenticated) {
-    return <Redirect href="/(tabs)" />;
+    return <Redirect href="/(root)/(tabs)" />;
   }
 
   return (

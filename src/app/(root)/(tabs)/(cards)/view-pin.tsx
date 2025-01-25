@@ -17,11 +17,11 @@ const ViewPINScreen = () => {
   const [selectedPage, setSelectedPage] = React.useState(0);
 
   return (
-    <View className="relative p-4 flex-1">
+    <View className="relative flex-1 p-4">
       <LCPagerViewWithPagination
         numberOfPages={bankCards.length}
         onPageSelected={setSelectedPage}
-        className="w-full aspect-card items-center justify-center"
+        className="aspect-card w-full items-center justify-center"
       >
         {bankCards.map((card, index) => (
           <LCBankCard key={index} {...card} />
@@ -38,9 +38,9 @@ const ViewPINScreen = () => {
       >
         <Pressable
           disabled={timeout}
-          className="disabled:bg-gray-500 active:bg-gray-800 bg-black items-center self-stretch py-4 rounded-xl"
+          className="items-center self-stretch rounded-xl bg-black py-4 active:bg-gray-800 disabled:bg-gray-500"
         >
-          <Text className="text-white text-xl font-semibold tracking-wider">
+          <Text className="text-xl font-semibold tracking-wider text-white">
             View PIN
           </Text>
         </Pressable>
@@ -77,8 +77,8 @@ const TimeoutError = () => {
   if (!showError) return null;
 
   return (
-    <View className="absolute top-0 left-0 right-0 bg-red-700 p-5 flex-row justify-between items-center">
-      <Text className="text-white text-lg">
+    <View className="absolute left-0 right-0 top-0 flex-row items-center justify-between bg-red-700 p-5">
+      <Text className="text-lg text-white">
         We've timed you out to keep your PIN secure.
       </Text>
       <EvilIcons

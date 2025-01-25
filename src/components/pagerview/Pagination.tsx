@@ -22,14 +22,14 @@ const PaginationElement = ({
       position.value,
       inputRange,
       [0.4, 1, 0.4],
-      Extrapolation.CLAMP
+      Extrapolation.CLAMP,
     );
 
     const scale = interpolate(
       position.value,
       inputRange,
       [0.6, 1, 0.6],
-      Extrapolation.CLAMP
+      Extrapolation.CLAMP,
     );
 
     return { opacity, transform: [{ scale }] };
@@ -37,7 +37,7 @@ const PaginationElement = ({
 
   return (
     <Animated.View
-      className="bg-black rounded-full w-3 h-3"
+      className="h-3 w-3 rounded-full bg-black"
       style={dotAnimatedStyle}
     />
   );
@@ -54,7 +54,7 @@ const Pagination = ({
   ...props
 }: PaginationProps) => {
   return (
-    <View className={cn("items-center flex-row gap-x-2", className)} {...props}>
+    <View className={cn("flex-row items-center gap-x-2", className)} {...props}>
       {Array(numberOfPages)
         .fill(0)
         .map((_, index) => (

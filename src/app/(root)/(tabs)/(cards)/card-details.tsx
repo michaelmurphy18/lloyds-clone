@@ -19,7 +19,7 @@ const CardDetailsPage = () => {
   };
 
   return (
-    <View className="p-4 flex-1">
+    <View className="flex-1 p-4">
       <LCPagerViewWithPagination
         numberOfPages={bankCards.length}
         onPageSelected={setSelectedPage}
@@ -30,7 +30,7 @@ const CardDetailsPage = () => {
             flip[selectedPage] &&
             toggleFlip(selectedPage);
         }}
-        className="w-full items-center justify-center aspect-card"
+        className="aspect-card w-full items-center justify-center"
       >
         {bankCards.map((card, index) => (
           <BankCardWithFlip key={index} {...card} flip={flip[index]} />
@@ -40,9 +40,9 @@ const CardDetailsPage = () => {
       <Pressable
         // onPress={() => setFlip(!flip)}
         onPress={() => toggleFlip(selectedPage)}
-        className="disabled:bg-gray-500 active:bg-gray-800  bg-black items-center self-stretch py-4 rounded-xl"
+        className="items-center self-stretch rounded-xl bg-black py-4 active:bg-gray-800 disabled:bg-gray-500"
       >
-        <Text className="text-white text-xl font-semibold tracking-wider">
+        <Text className="text-xl font-semibold tracking-wider text-white">
           {flip[selectedPage] ? "Hide details" : "Show details"}
         </Text>
       </Pressable>

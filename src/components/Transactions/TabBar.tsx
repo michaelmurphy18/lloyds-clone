@@ -1,16 +1,12 @@
 import { cn } from "@/libs/utils";
 import { TransactionTimeline } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { Dimensions, FlatList, Pressable, Text, View } from "react-native";
 import Animated, {
   SharedValue,
-  scrollTo,
   useAnimatedProps,
   useAnimatedReaction,
   useAnimatedRef,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useDerivedValue,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";

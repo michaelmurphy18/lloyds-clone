@@ -5,10 +5,10 @@ const CaughtUpIndicator = () => {
   return (
     <View className="flex-col items-center gap-y-2">
       <Image
-        source={require("../../../assets/images/icon.png")}
+        source={require("@assets/images/icon.png")}
         style={styles.caughtUpImage}
       />
-      <Text className="text-gray-600 text-center">All caught up</Text>
+      <Text className="text-center text-gray-600">All caught up</Text>
     </View>
   );
 };

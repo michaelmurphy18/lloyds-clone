@@ -22,12 +22,12 @@ const RedirectBanner = ({
   return (
     <View
       className={cn(
-        "bg-green-600 p-5 rounded-xl relative gap-y-2 max-h-[30%]",
-        className
+        "relative max-h-[30%] gap-y-2 rounded-xl bg-green-600 p-5",
+        className,
       )}
     >
-      <Text className="capitalize font-semibold text-lg">{title}</Text>
-      <Text className="text-sm font-light max-w-[75%] tracking-wide">
+      <Text className="text-lg font-semibold capitalize">{title}</Text>
+      <Text className="max-w-[75%] text-sm font-light tracking-wide">
         {description}
       </Text>
       <View className="flex-row items-center gap-x-2">

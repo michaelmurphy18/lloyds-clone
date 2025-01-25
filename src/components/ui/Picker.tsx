@@ -6,7 +6,7 @@ import {
   Picker as RNPicker,
   PickerProps as RNPickerProps,
 } from "@react-native-picker/picker";
-import { ItemValue } from "@react-native-picker/picker/typings/Picker";
+
 import { KeyboardAccessoryModal } from "./KeyboardAccessoryModal";
 
 type PickerProps<

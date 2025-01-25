@@ -21,16 +21,16 @@ const LCBankCard = ({
 } & ViewProps) => {
   return (
     <View
-      className={cn("flex-col items-center w-full h-full gap-y-3", className)}
+      className={cn("h-full w-full flex-col items-center gap-y-3", className)}
       {...props}
     >
-      <View className="bg-green-500 w-4/5 aspect-card rounded-xl p-4 justify-between shadow shadow-gray-400">
-        <Text className="uppercase font-semibold text-lg">Lloyds bank</Text>
-        <Text className="text-lg text-center font-semibold">
+      <View className="aspect-card w-4/5 justify-between rounded-xl bg-green-500 p-4 shadow shadow-gray-400">
+        <Text className="text-lg font-semibold uppercase">Lloyds bank</Text>
+        <Text className="text-center text-lg font-semibold">
           {accountNumber}
         </Text>
         <View className="flex-row items-baseline justify-between">
-          <Text className="uppercase font-light text-sm">{cardHolder}</Text>
+          <Text className="text-sm font-light uppercase">{cardHolder}</Text>
           <View className="relative items-end">
             <FontAwesome
               name={ProvidersWithIcon.get(provider)}
@@ -43,7 +43,7 @@ const LCBankCard = ({
           </View>
         </View>
       </View>
-      <Text className="capitalize font-medium">{accountType}</Text>
+      <Text className="font-medium capitalize">{accountType}</Text>
     </View>
   );
 };
