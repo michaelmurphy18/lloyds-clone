@@ -1,3 +1,4 @@
+import { useAuth } from "@/store";
 import { Redirect, Stack } from "expo-router";
 
 export const unstable_settings = {
@@ -6,7 +7,7 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const authenticated = false;
+  const { authenticated } = useAuth();
 
   if (!authenticated) {
     return <Redirect href="/(auth)" />;

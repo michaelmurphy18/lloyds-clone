@@ -1,7 +1,8 @@
+import { useAuth } from "@/store";
 import { Redirect, Stack } from "expo-router";
 
 const Layout = () => {
-  const authenticated = false;
+  const { authenticated } = useAuth();
 
   if (authenticated) {
     return <Redirect href="/(root)/(tabs)" />;

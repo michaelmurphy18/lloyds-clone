@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const findUserSchema = z.object({
+const findUserFormSchema = z.object({
   userId: z.string().min(1, { message: "User ID is required" }),
   firstName: z.string().min(1, {
     message: "First name is required",
@@ -9,6 +9,6 @@ const findUserSchema = z.object({
   dob: z.date({ required_error: "Date of birth is required" }),
 });
 
-type FindUserFormType = z.infer<typeof findUserSchema>;
+type FindUserForm = z.infer<typeof findUserFormSchema>;
 
-export { findUserSchema, FindUserFormType };
+export { findUserFormSchema, type FindUserForm };

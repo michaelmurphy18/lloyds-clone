@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const loginSchema = z.object({
+const loginFormSchema = z.object({
   userId: z
     .string()
     .min(4, { message: "User ID must be at least 4 characters" }),
@@ -9,6 +9,6 @@ const loginSchema = z.object({
   }),
 });
 
-type LoginForm = z.infer<typeof loginSchema>;
+type LoginForm = z.infer<typeof loginFormSchema>;
 
-export { loginSchema, LoginForm };
+export { loginFormSchema, type LoginForm };

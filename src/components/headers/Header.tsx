@@ -77,6 +77,9 @@ const Header = ({
       </View>
 
       <Text
+        adjustsFontSizeToFit
+        minimumFontScale={0.5}
+        numberOfLines={1}
         className={cn(
           "flex-1 text-lg font-semibold",
           textCenter ? "text-center" : "text-left",
@@ -109,7 +112,11 @@ const Header = ({
           </Link>
         )}
 
-        {showUser && renderIcon({ icon: FontAwesome5, name: "user-cog" })}
+        {showUser && (
+          <Link href="/profile" asChild>
+            {renderIcon({ icon: FontAwesome5, name: "user-cog" })}
+          </Link>
+        )}
 
         {showCall &&
           renderIcon({

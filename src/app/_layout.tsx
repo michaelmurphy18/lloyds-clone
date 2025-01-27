@@ -1,13 +1,11 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFonts } from "expo-font";
+import { ErrorToast } from "@/components/ui";
 import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { SplashScreen as LCSplashScreen } from "@/components/ui";
-import { useEffect } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
 import "../global.css";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import AppLoader from "@/components/AppLoader";
+import LoadingOverlay from "@/screens/LoadingOverlay";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -17,16 +15,16 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   return (
-    <AppLoader>
+    <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView>
-        <RootLayoutNav />
+        <Slot />
+        <LoadingOverlay />
+        <ErrorToast />
       </GestureHandlerRootView>
-    </AppLoader>
+    </QueryClientProvider>
   );
-}
-
-function RootLayoutNav() {
-  return <Slot />;
 }

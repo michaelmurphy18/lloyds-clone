@@ -5,7 +5,8 @@ import { Button, TextInput } from "@/components/ui";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "expo-router";
-import { LoginForm, loginSchema } from "@/schema";
+import { type LoginForm, loginFormSchema } from "@/schema";
+import { useAuth } from "@/store";
 
 const Page = () => {
   const {
@@ -13,13 +14,17 @@ const Page = () => {
     handleSubmit,
     formState: { isValid, errors },
   } = useForm<LoginForm>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginFormSchema),
     mode: "onChange",
+    defaultValues: {
+      userId: "docren155",
+      password: "password",
+    },
   });
 
-  const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    console.log(data);
-  };
+  const { login } = useAuth();
+
+  const onSubmit: SubmitHandler<LoginForm> = login;
 
   return (
     <View className="flex-1 justify-between gap-y-3 bg-white pt-5">

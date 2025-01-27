@@ -53,6 +53,7 @@ type ButtonProps = {
   left?: boolean;
   label?: string;
   textClassName?: string;
+  children?: React.ReactNode;
   textStyle?: StyleProp<TextStyle>;
 } & VariantProps<typeof buttonVariants> &
   ComponentPropsWithoutRef<typeof Pressable>;
@@ -78,9 +79,9 @@ const Button = forwardRef<ElementRef<typeof Pressable>, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {children ? (
-          children
-        ) : (
+        {children}
+
+        {size !== "icon" && (
           <Text
             className={cn(
               buttonTextVariants({ variant, size, className }),

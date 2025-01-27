@@ -1,12 +1,23 @@
-import { View, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
 import * as ExpoSplashScreen from "expo-splash-screen";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
-import { PropsWithChildren, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "@/store";
+import { Redirect } from "expo-router";
+import { GetCurrentUser } from "@/api/users/me";
+import { useQuery } from "@tanstack/react-query";
 
-export const SplashScreen = ({ children }: PropsWithChildren) => {
+export const SplashScreen = ({ imageUri }: { imageUri: string }) => {
   const [isAppReady, setAppReady] = useState(false);
   const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
+  const { authenticated } = useAuth();
+
+  const { isLoading } = useQuery({
+    queryKey: ["current-user"],
+    queryFn: GetCurrentUser,
+    // enabled: false,
+  });
 
   const onImageLoaded = useCallback(async () => {
     try {
@@ -14,7 +25,7 @@ export const SplashScreen = ({ children }: PropsWithChildren) => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000)); // wait for 1 second
 
-      await Promise.all([]);
+      // await Promise.all([]);
 
       setAnimationComplete(true);
     } catch (error) {
@@ -28,21 +39,27 @@ export const SplashScreen = ({ children }: PropsWithChildren) => {
 
   return (
     <View className="flex-1">
-      {isAppReady && children}
-      {!isSplashAnimationComplete && (
-        <View className="flex-1 items-center justify-center gap-y-2 bg-[#12b77b]">
-          <Image
-            style={styles.image}
-            source={require("@assets/images/splash-icon.png")}
-            contentFit="contain"
-            onLoad={onImageLoaded}
-          />
+      {isAppReady &&
+        !isLoading &&
+        (authenticated ? (
+          <Redirect href="/(root)/(tabs)" />
+        ) : (
+          <Redirect href="/(auth)" />
+        ))}
 
-          <View className="absolute bottom-1/4">
-            <ActivityIndicator size="large" color="black" />
-          </View>
+      {/* {!isSplashAnimationComplete && ( */}
+      <View className="flex-1 items-center justify-center gap-y-2 bg-[#12b77b]">
+        <Image
+          style={styles.image}
+          source={imageUri}
+          contentFit="contain"
+          onLoad={onImageLoaded}
+        />
+
+        <View className="absolute bottom-1/4">
+          <ActivityIndicator size="large" color="black" />
         </View>
-      )}
+      </View>
     </View>
   );
 };

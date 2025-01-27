@@ -5,7 +5,7 @@ import { Button, DataTimePicker, TextInput } from "@/components/ui";
 import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FindUserFormType, findUserSchema } from "@/schema";
+import { FindUserForm, findUserFormSchema } from "@/schema";
 import { MAXIMUM_DOB } from "@/constants";
 
 export default function Page() {
@@ -14,8 +14,8 @@ export default function Page() {
   const {
     control,
     formState: { errors, isValid },
-  } = useForm<FindUserFormType>({
-    resolver: zodResolver(findUserSchema),
+  } = useForm<FindUserForm>({
+    resolver: zodResolver(findUserFormSchema),
     mode: "all",
     shouldFocusError: true,
   });

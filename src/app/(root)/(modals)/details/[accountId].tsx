@@ -33,7 +33,7 @@ const Page = () => {
         <View className="my-1 h-px bg-gray-400" />
         <Link
           href={{
-            pathname: "/(modals)/details/send/[accountId]",
+            pathname: "/details/send/[accountId]",
             params: { accountId },
           }}
           asChild

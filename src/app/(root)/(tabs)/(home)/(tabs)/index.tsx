@@ -8,8 +8,15 @@ import {
 import { Href, Link } from "expo-router";
 import { View, Text, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
+import { useQuery } from "@tanstack/react-query";
+import { GetCurrentUser } from "@/api/users/me";
 
 const EverydayScreen = () => {
+  const { data } = useQuery({
+    queryKey: ["current-user"],
+    queryFn: GetCurrentUser,
+  });
+
   return (
     <ScrollView
       automaticallyAdjustContentInsets

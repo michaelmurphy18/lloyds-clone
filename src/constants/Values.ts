@@ -9,7 +9,7 @@ export const Spaces: {
   {
     title: "Everday",
     description: "Stay on top of your finances with our tools and insights",
-    link: "/(tabs)/(home)/(tabs)",
+    link: "/(root)/(tabs)",
     image: "",
   },
   {
@@ -56,14 +56,14 @@ export const CardManagementData: CardManagementSection[] = [
         label: "View PIN",
         description: "Access your card PIN securely.",
         icon: "key", // Icon name for display
-        href: "/(tabs)/(cards)/view-pin",
+        href: "/view-pin",
       },
       {
         id: "view_card_details",
         label: "View Card Details",
         description: "See your card number, expiry date, and CVV.",
         icon: "card-outline",
-        href: "/(tabs)/(cards)/card-details",
+        href: "/card-details",
       },
     ],
   },

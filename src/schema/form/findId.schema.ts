@@ -3,7 +3,7 @@ import { z } from "zod";
 
 // const accountType = ["current", "credit", "loan", "mortgage"] as const;
 
-const findUserIdSchema = z.object({
+const findUserIdFormSchema = z.object({
   accountType: z.enum(accountType),
   sortCode: z
     .string({ required_error: "Sort code is required" })
@@ -14,6 +14,6 @@ const findUserIdSchema = z.object({
   dateOfBirth: z.date(),
 });
 
-type FindUserIdFormType = z.infer<typeof findUserIdSchema>;
+type FindUserIdForm = z.infer<typeof findUserIdFormSchema>;
 
-export { findUserIdSchema, FindUserIdFormType };
+export { findUserIdFormSchema, type FindUserIdForm };

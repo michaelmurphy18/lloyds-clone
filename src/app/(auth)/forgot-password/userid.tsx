@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { sortCodeFormatter } from "@/libs/utils";
 
 import { MAXIMUM_DOB, accountType, accountTypeLabels } from "@/constants";
-import { FindUserIdFormType, findUserIdSchema } from "@/schema";
+import { FindUserIdForm, findUserIdFormSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // ! implement react-native-keyboard-controller after going out of Expo Go
@@ -15,13 +15,13 @@ export default function Page() {
     control,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FindUserIdFormType>({
-    resolver: zodResolver(findUserIdSchema),
+  } = useForm<FindUserIdForm>({
+    resolver: zodResolver(findUserIdFormSchema),
     mode: "all",
     shouldFocusError: true,
   });
 
-  const onSubmit = (data: FindUserIdFormType) => {
+  const onSubmit = (data: FindUserIdForm) => {
     console.log(data);
   };
 

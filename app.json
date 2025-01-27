@@ -32,10 +32,14 @@
       [
         "expo-asset",
         {
-          "assets": ["./assets/images", "./assets/images/icon.png"]
+          "assets": [
+            "./assets/images",
+            "./assets/images/icon.png"
+          ]
         }
       ],
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true

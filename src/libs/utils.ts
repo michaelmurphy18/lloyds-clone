@@ -44,3 +44,22 @@ export const formatDate = (
     },
   );
 };
+
+const greetings = ["Good Morning", "Good Afternoon", "Good Evening"];
+export function getGreetings() {
+  const currentHour = new Date().getHours();
+
+  const isHi = Math.random() < 0.2;
+
+  if (isHi) {
+    return "Hi";
+  }
+
+  if (currentHour >= 5 && currentHour < 12) {
+    return greetings[0]; // "Good Morning"
+  } else if (currentHour >= 12 && currentHour < 18) {
+    return greetings[1]; // "Good Afternoon"
+  } else {
+    return greetings[2]; // "Good Evening"
+  }
+}
