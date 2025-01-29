@@ -1,12 +1,21 @@
 import { Header } from "@/components/headers";
+import { sortCodeFormatter } from "@/libs/utils";
+import { GetAccountSchema } from "@/schema";
 import { Ionicons, Octicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { Suspense, useEffect, useState } from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Text, View } from "react-native";
 
 const Page = () => {
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
   const [isLoading, setIsloading] = useState(true);
+
+  const queryClient = useQueryClient();
+  const account = queryClient.getQueryData<GetAccountSchema>([
+    "account",
+    accountId,
+  ]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -16,7 +25,7 @@ const Page = () => {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !account) {
     return (
       <View className="flex-1 items-center justify-center">
         <Stack.Screen
@@ -52,16 +61,16 @@ const Page = () => {
 
       <BankDetailsCard
         type="local"
-        sortCode="00-00-00"
-        accountNumber="00000000"
-        holderName="John Doe"
+        sortCode={sortCodeFormatter(account.sortCode)}
+        accountNumber={account.accountNumber}
+        holderName={account.nameOnAccount}
       />
 
       <BankDetailsCard
         type="international"
-        iban="GB12ABCD10203012345678"
-        bic="LOYDGBMMXXX"
-        holderName="John Doe"
+        iban={account.iban}
+        bic={account.bic}
+        holderName={account.nameOnAccount}
       />
     </View>
   );

@@ -7,16 +7,25 @@ import { useAuth } from "@/store";
 import { Redirect } from "expo-router";
 import { GetCurrentUser } from "@/api/users/me";
 import { useQuery } from "@tanstack/react-query";
+import { GetAllAccount } from "@/api/account/main";
 
 export const SplashScreen = ({ imageUri }: { imageUri: string }) => {
   const [isAppReady, setAppReady] = useState(false);
   const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
   const { authenticated } = useAuth();
 
-  const { isLoading } = useQuery({
+  const { data: user } = useQuery({
     queryKey: ["current-user"],
     queryFn: GetCurrentUser,
-    // enabled: false,
+    staleTime: Infinity,
+  });
+
+  const userId = user?.id;
+
+  const { isLoading } = useQuery({
+    queryKey: ["accounts", userId],
+    queryFn: GetAllAccount,
+    enabled: !!userId,
   });
 
   const onImageLoaded = useCallback(async () => {

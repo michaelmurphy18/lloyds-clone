@@ -8,9 +8,11 @@ import { Link } from "expo-router";
 type TransactionAccountSummaryProps = {
   availableBalance: number;
   overdraftLimit: number;
+  id: string;
 } & AnimatedProps<ViewProps>;
 
 const TransactionAccountSummary = ({
+  id,
   availableBalance,
   overdraftLimit,
   ...props
@@ -49,8 +51,8 @@ const TransactionAccountSummary = ({
         <Link
           asChild
           href={{
-            pathname: "/(modals)/details/[accountId]",
-            params: { accountId: "001" },
+            pathname: "/details/[accountId]",
+            params: { accountId: id },
           }}
         >
           <Pressable className="items-center gap-y-3 rounded-lg p-2 active:bg-black/10">

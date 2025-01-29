@@ -1,10 +1,29 @@
 import { Button } from "@/components/ui";
+import { GetCurrentUser } from "@/schema";
 import { useAuth } from "@/store";
 import { MaterialIcons, Octicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { ScrollView, Text, View } from "react-native";
 
 const ProfileScreen = () => {
   const { logout } = useAuth();
+
+  const queryClient = useQueryClient();
+
+  const user = queryClient.getQueryData<GetCurrentUser>(["current-user"]);
+
+  if (!user) {
+    return (
+      <Button label="Log out" size="lg" onPress={logout}>
+        <MaterialIcons
+          name="logout"
+          size={24}
+          color="white"
+          className="absolute right-4"
+        />
+      </Button>
+    );
+  }
 
   return (
     <View className="flex-1 gap-y-3 py-5">
@@ -16,12 +35,12 @@ const ProfileScreen = () => {
 
         <View className="gap-y-1 rounded-xl bg-white px-3 py-4">
           <Text className="text-sm text-gray-600">Name and title:</Text>
-          <Text className="font-semibold">John Doe</Text>
+          <Text className="font-semibold">{user.fullName}</Text>
         </View>
 
         <View className="gap-y-1 rounded-xl bg-white px-3 py-4">
           <Text className="text-sm text-gray-600">User ID:</Text>
-          <Text className="font-semibold uppercase">docren155</Text>
+          <Text className="font-semibold uppercase">{user.userId}</Text>
         </View>
 
         <View className="relative gap-y-2 rounded-xl bg-white px-3 py-4">
@@ -60,7 +79,7 @@ const ProfileScreen = () => {
 
         <View className="gap-y-1 rounded-xl bg-white px-3 py-4">
           <Text className="text-sm text-gray-600">Email:</Text>
-          <Text className="font-semibold uppercase">john.doe@example.com</Text>
+          <Text className="font-semibold uppercase">{user.email}</Text>
         </View>
 
         <View className="itecem flex-row justify-between gap-y-1 rounded-xl bg-white px-3 py-4">

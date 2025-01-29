@@ -1,33 +1,62 @@
 import { z } from "zod";
 
-const currentUserResponseSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  email: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  dob: z.string(),
-  createdAt: z.string(),
-  updatedAt: z.string(),
-  fullName: z.string(),
-  iat: z.number(),
-  exp: z.number(),
-});
+const getCurrentUserSchema = z
+  .object({
+    id: z.string(),
+    userId: z.string(),
+    email: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+    dob: z.string(),
+    accounts: z.array(z.string()),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    fullName: z.string(),
+    iat: z.number(),
+    exp: z.number(),
+  })
+  .omit({ iat: true, exp: true });
 
-type CurrentUserResponse = z.infer<typeof currentUserResponseSchema>;
+type GetCurrentUser = z.infer<typeof getCurrentUserSchema>;
 
-export { currentUserResponseSchema, type CurrentUserResponse };
+export { getCurrentUserSchema, type GetCurrentUser };
 
 // {
-//     "userId": "docren155",
-//     "email": "amilmohd155@gmail.com",
-//     "firstName": "Amil",
-//     "lastName": "Hamza",
-//     "dob": "1998-11-28",
-//     "createdAt": "2025-01-21T20:47:36.257Z",
-//     "updatedAt": "2025-01-21T20:47:36.257Z",
-//     "fullName": "Amil Hamza",
-//     "id": "679007e87c267f9bfe542313",
-//     "iat": 1737963744,
-//     "exp": 1738050144
+//   id: z.string(),
+//   userId: z.string(),
+//   email: z.string(),
+//   firstName: z.string(),
+//   lastName: z.string(),
+//   dob: z.string(),
+//   createdAt: z.string(),
+//   updatedAt: z.string(),
+//   fullName: z.string(),
+//   iat: z.number(),
+//   exp: z.number(),
+// }
+
+// {
+//   "success": true,
+//   "code": 200,
+//   "message": "Current user",
+//   "data": {
+//       "userId": "docren155",
+//       "email": "amilmohd155@gmail.com",
+//       "firstName": "Amil",
+//       "lastName": "Hamza",
+//       "dob": "1998-11-28",
+//       "accounts": [
+//           "6797c797ef7b53dd72763213"
+//       ],
+//       "createdAt": "2025-01-27T17:51:19.613Z",
+//       "updatedAt": "2025-01-27T17:51:19.613Z",
+//       "fullName": "Amil Hamza",
+//       "id": "6797c797ef7b53dd72763212",
+//       "iat": 1738005554,
+//       "exp": 1738091954
+//   },
+//   "request": {
+//       "method": "GET",
+//       "url": "/api/users/me"
+//   }
 // }

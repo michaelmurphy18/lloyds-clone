@@ -8,7 +8,7 @@ export default function HomeLayout() {
   const { data } = useQuery({
     queryKey: ["current-user"],
     queryFn: GetCurrentUser,
-    select: (data) => data.fullName,
+    select: (res) => res.fullName,
   });
 
   return (

@@ -1,4 +1,3 @@
-import { CurrencyView } from "@/components";
 import {
   AccountMainCard,
   RedirectBanner,
@@ -8,14 +7,16 @@ import {
 import { Href, Link } from "expo-router";
 import { View, Text, ScrollView, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { useQuery } from "@tanstack/react-query";
-import { GetCurrentUser } from "@/api/users/me";
+import { useQueryClient } from "@tanstack/react-query";
+import { GetAllAccountSchema } from "@/schema";
 
 const EverydayScreen = () => {
-  const { data } = useQuery({
-    queryKey: ["current-user"],
-    queryFn: GetCurrentUser,
-  });
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<{ id: string }>(["current-user"]);
+  const accounts = queryClient.getQueryData<GetAllAccountSchema>([
+    "accounts",
+    user?.id,
+  ]);
 
   return (
     <ScrollView
@@ -23,7 +24,10 @@ const EverydayScreen = () => {
       contentContainerClassName="gap-y-4 p-5"
     >
       <Text className="text-lg font-semibold">Current accounts</Text>
-      <AccountMainCard />
+      {accounts?.map((account) => (
+        <AccountMainCard key={account.id} {...account} />
+      ))}
+
       {/* add other accounts */}
       <OtherAccountCard />
 

@@ -6,17 +6,26 @@ import { cn } from "@/libs/utils";
 import { AccountSummaryCard, RedirectBanner } from "@/components/cards";
 import { CaughtUpIndicator } from "@/components/indicators";
 import { Spaces } from "@/constants";
+import { useQueryClient } from "@tanstack/react-query";
+import { GetAllAccountSchema } from "@/schema";
 
 const SummaryScreen = () => {
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData<{ id: string }>(["current-user"]);
+  const accounts = queryClient.getQueryData<GetAllAccountSchema>([
+    "accounts",
+    user?.id,
+  ]);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      // className="px-5 pt-5"
       contentContainerClassName="gap-y-5 px-5 pt-5"
-      // contentContainerStyle={{ flex: 1 }}
     >
       {/* Accounts Card*/}
-      <AccountSummaryCard />
+      {accounts?.map((account) => (
+        <AccountSummaryCard {...account} key={account.id} />
+      ))}
 
       {/* Credit Score Checker Banner */}
       <RedirectBanner

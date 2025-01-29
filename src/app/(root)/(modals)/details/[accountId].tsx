@@ -1,12 +1,24 @@
 import { Header } from "@/components/headers";
+import { sortCodeFormatter } from "@/libs/utils";
+import { GetAccountSchema } from "@/schema";
 import { Octicons } from "@expo/vector-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 const Page = () => {
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
-
   const router = useRouter();
+
+  const queryClient = useQueryClient();
+  const account = queryClient.getQueryData<GetAccountSchema>([
+    "account",
+    accountId,
+  ]);
+
+  if (!account) {
+    return null;
+  }
 
   return (
     <View className="flex-1 bg-white py-5">
@@ -23,11 +35,13 @@ const Page = () => {
         <View className="gap-y-2">
           <View className="flex-row items-center justify-between">
             <Text className="text-sm">Sort Code</Text>
-            <Text className="font-bold">00-00-00</Text>
+            <Text className="font-bold">
+              {sortCodeFormatter(account.sortCode)}
+            </Text>
           </View>
           <View className="flex-row items-center justify-between">
             <Text className="text-sm">Account Number</Text>
-            <Text className="font-bold">00000000</Text>
+            <Text className="font-bold">{account.accountNumber}</Text>
           </View>
         </View>
         <View className="my-1 h-px bg-gray-400" />

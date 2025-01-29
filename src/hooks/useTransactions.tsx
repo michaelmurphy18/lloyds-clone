@@ -3,9 +3,22 @@ import {
   sampleTransactionTimeline,
 } from "@/constants";
 import { TransactionSection, TransactionType } from "@/types";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
 const useTransactions = (accountId: string) => {
+  // const { data } = useInfiniteQuery({
+  //   queryKey: ["transactions", accountId],
+  //   queryFn: ({ pageParam }) => {
+  //     return {
+  //       nextCursor: pageParam + 1,
+  //       data: sampleTransactions,
+  //     };
+  //   },
+  //   initialPageParam: 1,
+  //   getNextPageParam: (lastPage) => lastPage.nextCursor,
+  // });
+
   const timeline = useMemo(() => sampleTransactionTimeline, []);
   const sections = useMemo(() => sampleTransactionSectionList, []);
   const [filter, setFilter] = useState<TransactionType | null>(null);

@@ -1,3 +1,4 @@
 export * from "./useAnimatedPagerHandler";
 export * from "./useDimensions";
 export { default as useTransactions } from "./useTransactions";
+export { default as useAnimatedAccountScreen } from "./useAnimatetAccountScreen";
