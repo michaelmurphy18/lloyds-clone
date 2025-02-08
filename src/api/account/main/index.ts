@@ -13,6 +13,7 @@ export async function GetAllAccount() {
       }),
     );
 
+  // await new Promise((resolve) => setTimeout(resolve, 15000));
   return response;
 }
 

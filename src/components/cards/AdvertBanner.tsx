@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { cn } from "@/libs/utils";
 
-type RedirectBanner = {
+type AdvertBannerProps = {
   title: string;
   description: string;
   action: string;
@@ -12,13 +12,13 @@ type RedirectBanner = {
 } & ViewProps;
 
 // Todo: click to see credit score
-const RedirectBanner = ({
+const AdvertBanner = ({
   title,
   description,
   action,
   icon,
   className,
-}: RedirectBanner) => {
+}: AdvertBannerProps) => {
   return (
     <View
       className={cn(
@@ -40,7 +40,7 @@ const RedirectBanner = ({
   );
 };
 
-export default RedirectBanner;
+export default AdvertBanner;
 
 const styles = StyleSheet.create({
   creditScoreImage: {

@@ -28,12 +28,12 @@ export default function ViewPINModal() {
     const timeoutId = setTimeout(() => {
       router.dismiss();
       router.navigate({
-        pathname: "/(tabs)/(cards)/view-pin",
+        pathname: "/view-pin",
         params: {
           timeout: String(true),
         },
       });
-    }, 1000); // times out after 1 second
+    }, 10000); // times out after 1 second
 
     return () => clearTimeout(timeoutId);
   }, [router]);

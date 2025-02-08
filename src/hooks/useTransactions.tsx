@@ -50,18 +50,3 @@ function filterTransactionSectionsByType(
     })
     .filter((section) => section.data.length > 0);
 }
-
-// function sortTransactionSectionsByDate(
-//   sections: TransactionSection[],
-// ): TransactionSection[] {
-//   return sections.map((section) => {
-//     const sortedData = [...section.data].sort((a, b) => {
-//       const dataA = new Date(a.date).getTime();
-//       const dataB = new Date(b.date).getTime();
-
-//       return dataB - dataA;
-//     });
-
-//     return { date: section.date, data: sortedData };
-//   });
-// }

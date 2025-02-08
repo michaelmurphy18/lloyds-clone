@@ -5,13 +5,13 @@ const refreshAuth = async (failedRequest: any): Promise<any> => {
   const refreshToken = useAuth.getState().refreshToken;
 
   if (!refreshToken) {
-    return Promise.reject();
+    return Promise.reject("No refresh token");
   }
 
   const newToken = await GetNewAccessToken(refreshToken);
 
   if (!newToken) {
-    return Promise.reject();
+    return Promise.reject("Failed to refresh token");
   }
 
   failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;

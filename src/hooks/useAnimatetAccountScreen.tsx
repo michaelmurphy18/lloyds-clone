@@ -2,86 +2,71 @@ import {
   Extrapolation,
   interpolate,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
-import { useDimensions } from "./useDimensions";
-import { useState } from "react";
+import { useLayout } from "./useLayout.reanimated";
 
 const useAnimatedAccountScreen = () => {
-  const { layout, onLayout } = useDimensions();
-  const { layout: containerLayout, onLayout: onContainerLayout } =
-    useDimensions();
+  const scrollOffset = useSharedValue(0);
 
-  const offset = useSharedValue(0);
-  const vPPosition = useSharedValue(0);
-  const vPSelectedPage = useSharedValue(0);
-  const [activePage, setActivePage] = useState(0);
+  const { onLayout: onSummaryLayout, height: summaryHeight } = useLayout();
+  const { onLayout: onTabBarLayout, height: tabBarHeight } = useLayout();
+  const { onLayout: onFilterLayout, height: filterHeight } = useLayout();
 
-  const animatedSummaryStyle = useAnimatedStyle(() => {
-    if (!layout) return {};
+  const threshold = useDerivedValue(() => {
+    return summaryHeight.value;
+  });
 
-    const inputRange = [0, layout.height];
-    const outRange = [0, -layout.height];
-
+  const animatedTabBarStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
-      -offset.value,
-      inputRange,
-      outRange,
-      Extrapolation.CLAMP,
-    );
-
-    const opacity = interpolate(
-      -offset.value,
-      [0, layout.height / 2],
-      [1, 0],
+      scrollOffset.value,
+      [0, threshold.value],
+      [threshold.value, 0],
       Extrapolation.CLAMP,
     );
 
     return {
-      transform: [{ translateY: -translateY }],
-      opacity,
+      transform: [
+        {
+          translateY,
+        },
+      ],
     };
-  }, [layout, offset]);
+  });
 
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    if (!layout || !containerLayout) return {};
+  const animatedFlatlistStyle = useAnimatedStyle(() => {
+    return {
+      paddingTop: summaryHeight.value + tabBarHeight.value + filterHeight.value,
+    };
+  });
 
-    const inputRange = [0, layout.height];
-
+  const animatedFilterStyle = useAnimatedStyle(() => {
     const translateY = interpolate(
-      -offset.value,
-      inputRange,
-      [0, -layout.height],
-      Extrapolation.CLAMP,
-    );
-
-    const height = interpolate(
-      -offset.value,
-      inputRange,
-      // [528, 675],
-      [containerLayout.height, containerLayout.height + layout.height],
+      scrollOffset.value,
+      [0, threshold.value],
+      [summaryHeight.value + tabBarHeight.value, tabBarHeight.value],
       Extrapolation.CLAMP,
     );
 
     return {
-      flex: 0,
-      transform: [{ translateY }],
-      height: height,
+      transform: [
+        {
+          translateY,
+        },
+      ],
     };
-  }, [layout]);
+  });
 
   return {
-    animatedSummaryStyle,
-    animatedContainerStyle,
-    offset,
-    vPPosition,
-    vPSelectedPage,
-    activePage,
-    setActivePage,
-    layout,
-    onLayout,
-    containerLayout,
-    onContainerLayout,
+    animatedFlatlistStyle,
+    animatedTabBarStyle,
+    animatedFilterStyle,
+    scrollOffset,
+    threshold,
+    onTabBarLayout,
+    onSummaryLayout,
+    onFilterLayout,
   };
 };
 

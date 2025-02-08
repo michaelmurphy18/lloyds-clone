@@ -1,15 +1,18 @@
 import { GetCurrentUser } from "@/api/users/me";
 import { Header } from "@/components/headers";
+import { UserQueryKey } from "@/libs/query-keys";
 import { getGreetings } from "@/libs/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Stack } from "expo-router";
+import { Stack, useGlobalSearchParams } from "expo-router";
 
 export default function HomeLayout() {
-  const { data } = useQuery({
-    queryKey: ["current-user"],
+  const { data: fullName } = useQuery({
+    queryKey: UserQueryKey.currentUser,
     queryFn: GetCurrentUser,
     select: (res) => res.fullName,
   });
+
+  const glob = useGlobalSearchParams<{ id: string; name: string }>();
 
   return (
     <Stack>
@@ -21,16 +24,26 @@ export default function HomeLayout() {
               showMessage
               showSupport
               showUser
-              title={`${getGreetings()}, ${data}`}
+              title={`${getGreetings()}, ${fullName}`}
               {...props}
             />
           ),
         }}
       />
+
       <Stack.Screen
-        name="transaction"
+        name="account/[id]"
         options={{
-          headerShown: false,
+          title: glob?.name,
+          header: (props) => <Header {...props} showBack />,
+        }}
+      />
+
+      <Stack.Screen
+        name="transaction/[id]"
+        options={{
+          title: "Transaction Details",
+          header: (props) => <Header showBack {...props} />,
         }}
       />
     </Stack>

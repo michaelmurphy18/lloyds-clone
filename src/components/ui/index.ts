@@ -5,3 +5,4 @@ export * from "./KeyboardAccessoryModal";
 export * from "./Picker";
 export * from "./SplashScreen";
 export * from "./ErrorToast";
+export * from "./SketeltonLoader";

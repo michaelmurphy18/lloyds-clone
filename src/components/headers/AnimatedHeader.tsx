@@ -13,16 +13,18 @@ import CurrencyView from "@/components/CurrencyView";
 
 type HeaderProps = {
   scrollOffset: SharedValue<number>;
-  height?: number;
+  threshold: SharedValue<number>;
+  balance: number;
 } & NativeStackHeaderProps;
 
 const AnimatedCurrencyView = Animated.createAnimatedComponent(CurrencyView);
 
 const AnimatedHeader = ({
   scrollOffset,
-  height,
+  threshold,
   options,
   route,
+  balance,
   ...props
 }: HeaderProps) => {
   const { top } = useSafeAreaInsets();
@@ -32,18 +34,16 @@ const AnimatedHeader = ({
   let title = options.title || routeName;
 
   const animatedAmountStyle = useAnimatedStyle(() => {
-    if (!height) return {};
-
     const translateY = interpolate(
       -scrollOffset.value,
-      [0, height / 2],
+      [0, threshold.value / 2],
       [-50, 0],
       Extrapolation.CLAMP,
     );
 
     const opacity = interpolate(
       -scrollOffset.value,
-      [0, height / 2],
+      [0, threshold.value / 2],
       [0, 1],
       Extrapolation.CLAMP,
     );
@@ -52,7 +52,7 @@ const AnimatedHeader = ({
       transform: [{ translateY: `${translateY}%` }],
       opacity,
     };
-  }, [height, scrollOffset]);
+  }, [threshold, scrollOffset]);
 
   return (
     <View
@@ -69,7 +69,7 @@ const AnimatedHeader = ({
       <Text className="text-lg font-bold">{title}</Text>
 
       <AnimatedCurrencyView
-        amount={100}
+        amount={balance}
         style={animatedAmountStyle}
         className="-translate-y-1/2 text-lg opacity-0"
       />

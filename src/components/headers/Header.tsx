@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { AntDesign, Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { NativeStackHeaderProps } from "@react-navigation/native-stack";
-import { Link, useRouter } from "expo-router";
+import { Href, Link, useRouter } from "expo-router";
 import { cn } from "@/libs/utils";
 import { Button } from "../ui";
 
@@ -15,6 +15,7 @@ type HeaderProps = {
   showBack?: boolean;
   showCall?: boolean;
   textCenter?: boolean;
+  dismissTo?: Href;
   title?: string;
   className?: string;
   useSafeArea?: boolean;
@@ -29,6 +30,7 @@ const Header = ({
   showCall = false,
   textCenter = false,
   title: titleFromProps,
+  dismissTo,
   route,
   options,
   className,
@@ -94,14 +96,14 @@ const Header = ({
           <View className="w-6" />
         )}
 
-        {showClose && (
-          <Link asChild href="../">
-            {renderIcon({
-              icon: AntDesign,
-              name: "close",
-            })}
-          </Link>
-        )}
+        {showClose &&
+          renderIcon({
+            icon: AntDesign,
+            name: "close",
+            action: () =>
+              router.canDismiss() &&
+              (dismissTo ? router.dismissTo(dismissTo) : router.dismiss()),
+          })}
 
         {showSupport && (
           <Link href="/support" asChild>

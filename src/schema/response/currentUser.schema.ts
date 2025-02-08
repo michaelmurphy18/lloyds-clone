@@ -17,9 +17,9 @@ const getCurrentUserSchema = z
   })
   .omit({ iat: true, exp: true });
 
-type GetCurrentUser = z.infer<typeof getCurrentUserSchema>;
+type CurrentUser = z.infer<typeof getCurrentUserSchema>;
 
-export { getCurrentUserSchema, type GetCurrentUser };
+export { getCurrentUserSchema, type CurrentUser };
 
 // {
 //   id: z.string(),

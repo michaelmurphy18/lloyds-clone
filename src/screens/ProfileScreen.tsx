@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui";
-import { GetCurrentUser } from "@/schema";
+import { CurrentUser } from "@/schema";
 import { useAuth } from "@/store";
 import { MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ const ProfileScreen = () => {
 
   const queryClient = useQueryClient();
 
-  const user = queryClient.getQueryData<GetCurrentUser>(["current-user"]);
+  const user = queryClient.getQueryData<CurrentUser>(["current-user"]);
 
   if (!user) {
     return (

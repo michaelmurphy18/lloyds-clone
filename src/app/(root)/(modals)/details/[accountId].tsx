@@ -11,10 +11,12 @@ const Page = () => {
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const account = queryClient.getQueryData<GetAccountSchema>([
+  const data = queryClient.getQueryData<GetAccountSchema>([
     "account",
     accountId,
   ]);
+
+  const account = data?.account;
 
   if (!account) {
     return null;

@@ -37,7 +37,10 @@ const TransactionFilterView = ({ filter }: TransactionFilterViewProps) => {
   };
 
   return (
-    <View className="flex-row items-center gap-x-3 bg-white p-4">
+    <View
+      className="absolute h-20 w-full flex-row items-center gap-x-3 bg-white p-4"
+      style={{ top: 45 }}
+    >
       <Pressable
         onPress={() => handleToggle("deposit")}
         className={cn(

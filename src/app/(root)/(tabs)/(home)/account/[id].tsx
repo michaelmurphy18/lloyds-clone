@@ -1,106 +1,87 @@
 import { GetAccount } from "@/api/account/main";
 import {
-  TransactionsAccountSummary,
+  AccountSummary,
   TransactionsFilterView,
   TransactionsTabBar,
   TransactionsViewPager,
 } from "@/components/Transactions";
-import { AnimatedHeader, Header } from "@/components/headers";
+
+import { AnimatedHeader } from "@/components/headers";
 import { useAnimatedAccountScreen, useTransactions } from "@/hooks";
-import { LoadingScreen } from "@/screens/LoadingScreen";
 import { useLoadingScreen } from "@/store";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { Suspense } from "react";
-import { View } from "react-native";
-import Animated from "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
+import { View, Text, Pressable } from "react-native";
+import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
 
 const Page = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, name: accountName } = useLocalSearchParams<{
+    id: string;
+    name: string;
+  }>();
 
-  const { data: account, isLoading } = useQuery({
+  const { setLoading } = useLoadingScreen();
+
+  const { data, isLoading } = useQuery({
     queryKey: ["account", id],
     queryFn: () => GetAccount(id),
     // staleTime: 0,
   });
 
-  const { timeline, filterTransactions, sections } = useTransactions(id);
+  useEffect(() => {
+    setLoading(isLoading || !data);
+  }, [data, isLoading, setLoading]);
 
-  const {
-    onLayout,
-    layout,
-    onContainerLayout,
-    offset,
-    vPPosition,
-    vPSelectedPage,
-    animatedContainerStyle,
-    activePage,
-    animatedSummaryStyle,
-    setActivePage,
-  } = useAnimatedAccountScreen();
+  const { filterTransactions, sections } = useTransactions(id);
 
-  if (isLoading || !account) {
-    return (
-      <>
-        <Stack.Screen
-          options={{
-            title: "Classic",
-            header: (props) => <Header {...props} showBack />,
-          }}
-        />
-        <LoadingScreen />
-      </>
-    );
+  const { threshold, scrollOffset, onSummaryLayout } =
+    useAnimatedAccountScreen();
+
+  if (isLoading || !data) {
+    return null;
   }
+
+  const { account, timeline } = data;
+
+  if (!account || !timeline) {
+    return null;
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: "Classic",
+          title: accountName,
           header: (props) => (
             <AnimatedHeader
-              scrollOffset={offset}
-              height={layout?.height}
+              balance={account.balance}
+              scrollOffset={scrollOffset}
+              threshold={threshold}
               {...props}
             />
           ),
         }}
       />
-      {/* Summary */}
-      <TransactionsAccountSummary
-        onLayout={onLayout}
-        id={id}
-        style={animatedSummaryStyle}
-        availableBalance={account.balance}
-        overdraftLimit={account.overDraftLimit}
-      />
 
-      <Animated.View
-        onLayout={onContainerLayout}
-        style={[{ flex: 1 }, animatedContainerStyle]}
-      >
-        <TransactionsTabBar
-          timeline={timeline}
-          position={vPPosition}
-          selectedPage={vPSelectedPage}
-          setActivePage={setActivePage}
-        />
-
-        {/* Filter */}
-        <TransactionsFilterView filter={filterTransactions} />
-
-        {layout && (
-          <TransactionsViewPager
-            timeline={timeline}
-            sections={sections}
-            threshold={layout.height} //need to change
-            offset={offset}
-            selectedPage={vPSelectedPage.set}
-            position={vPPosition.set}
-            activePage={activePage}
-          />
-        )}
-      </Animated.View>
+      <Tabs.Container renderHeader={() => <AccountSummary {...account} />}>
+        {timeline.map((month, index) => (
+          <Tabs.Tab name={month} key={month} label={month}>
+            <Tabs.FlashList
+              estimatedItemSize={100}
+              data={Array.from({ length: 20 }, (_, i) => i)}
+              renderItem={({ item }) => (
+                <View className="bg-white px-3 py-5">
+                  <Text>
+                    {timeline[index]} {item}
+                  </Text>
+                </View>
+              )}
+            />
+          </Tabs.Tab>
+        ))}
+      </Tabs.Container>
     </View>
   );
 };

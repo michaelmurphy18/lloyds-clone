@@ -1,37 +1,38 @@
 import {
-  AccountMainCard,
-  RedirectBanner,
+  AccountMain,
+  AdvertBanner,
   HorizontalCard,
   OtherAccountCard,
 } from "@/components/cards";
-import { Href, Link } from "expo-router";
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { useAccountsQuery } from "@/hooks";
 import { Image } from "expo-image";
-import { useQueryClient } from "@tanstack/react-query";
-import { GetAllAccountSchema } from "@/schema";
+import { Href, Link, Redirect } from "expo-router";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 const EverydayScreen = () => {
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData<{ id: string }>(["current-user"]);
-  const accounts = queryClient.getQueryData<GetAllAccountSchema>([
-    "accounts",
-    user?.id,
-  ]);
+  const {
+    userQuery: { user },
+  } = useAccountsQuery();
 
+  if (!user) {
+    // TODO: Add error toast message
+    return <Redirect href="/(auth)" />;
+  }
+
+  const count = user.accounts.length;
   return (
     <ScrollView
       automaticallyAdjustContentInsets
       contentContainerClassName="gap-y-4 p-5"
     >
       <Text className="text-lg font-semibold">Current accounts</Text>
-      {accounts?.map((account) => (
-        <AccountMainCard key={account.id} {...account} />
-      ))}
+
+      <Accounts id={user.id} count={count} />
 
       {/* add other accounts */}
       <OtherAccountCard />
 
-      <RedirectBanner
+      <AdvertBanner
         title="Check your credit scrore"
         description="Congratulations - you've been registerd for Your Credit Score for a year"
         icon={require("@assets/images/icon.png")}
@@ -86,7 +87,7 @@ const EverydayScreen = () => {
       </View>
 
       {/* Benefits */}
-      <RedirectBanner
+      <AdvertBanner
         title="Benefits to lighten the load"
         description={`£23 billion of government support is unclaimed each year. \nUse our benifits calculator to check if you're missing out.`}
         icon={require("@assets/images/icon.png")}
@@ -125,5 +126,27 @@ const GridItem = ({ label, caption, icon, href }: GridItemProps) => {
         <Text className="text-sm font-semibold">{label}</Text>
       </Pressable>
     </Link>
+  );
+};
+
+const Accounts = ({ id, count }: { id: string; count: number }) => {
+  const {
+    accountsQuery: { accounts, isLoading },
+  } = useAccountsQuery({
+    id,
+  });
+
+  if (!accounts || isLoading) {
+    return Array.from({ length: count }).map((_, index) => (
+      <AccountMain.Skeleton key={index} />
+    ));
+  }
+
+  return (
+    <>
+      {accounts?.map((account) => (
+        <AccountMain.Card key={account.id} {...account} />
+      ))}
+    </>
   );
 };

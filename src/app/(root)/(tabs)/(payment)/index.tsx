@@ -1,11 +1,5 @@
-import { View, Text } from "react-native";
-
-const PaymentScreen = () => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Payment!</Text>
-    </View>
-  );
+const Page = () => {
+  return null;
 };
 
-export default PaymentScreen;
+export default Page;

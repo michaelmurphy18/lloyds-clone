@@ -4,31 +4,25 @@ import { CurrencyView } from "@/components";
 import { formatCurrency } from "@/libs/utils";
 import { FontAwesome5, FontAwesome6 } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import { Account } from "@/schema";
 
-type TransactionAccountSummaryProps = {
-  availableBalance: number;
-  overdraftLimit: number;
-  id: string;
-} & AnimatedProps<ViewProps>;
+// { id, availableBalance, overdraftLimit, ...props }
 
-const TransactionAccountSummary = ({
+type AccountSummaryProps = Pick<Account, "balance" | "overdraftLimit" | "id">;
+
+const AccountSummary = ({
   id,
-  availableBalance,
+  balance,
   overdraftLimit,
   ...props
-}: TransactionAccountSummaryProps) => {
+}: AccountSummaryProps) => {
   return (
-    <Animated.View
-      // onLayout={onLayout}
-      // style={animatedSummaryStyle}
-      {...props}
-      className="gap-y-5 py-2"
-    >
+    <View className="gap-y-5 bg-transparent py-2">
       <View className="items-center gap-y-1">
         <CurrencyView
           integerSize="text-2xl"
           decimalSize="text-lg"
-          amount={availableBalance}
+          amount={balance}
         />
         <Text>Available balance</Text>
       </View>
@@ -61,8 +55,10 @@ const TransactionAccountSummary = ({
           </Pressable>
         </Link>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
-export default TransactionAccountSummary;
+AccountSummary.displayName = "TransactionAccountSummary";
+
+export default AccountSummary;

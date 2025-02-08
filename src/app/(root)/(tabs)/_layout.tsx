@@ -1,6 +1,6 @@
 import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Header } from "@/components/headers";
 import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -18,13 +18,21 @@ function TabBarIcon({
 }
 
 export default function TabLayout() {
+  const router = useRouter();
+
   return (
     <Tabs
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
-        // header: (props) => <Header {...props} />,
+        tabBarStyle: {
+          display:
+            route.name === "(payment)" || route.name === "(search)"
+              ? "none"
+              : "flex",
+        },
+
         tabBarActiveTintColor: "#000000",
-      }}
+      })}
     >
       <Tabs.Screen name="index" options={{ href: null }} />
       <Tabs.Screen
@@ -51,7 +59,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="(payment)"
+        name="(payment)/index"
         options={{
           title: "Payment",
           tabBarIcon: ({ color }) => (
@@ -62,15 +70,27 @@ export default function TabLayout() {
             />
           ),
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.push("/(root)/(modals)/(payment)");
+          },
+        }}
       />
 
       <Tabs.Screen
-        name="(search)"
+        name="(search)/index"
         options={{
           title: "Search",
           tabBarIcon: ({ color }) => (
             <TabBarIcon icon={AntDesign} name="search1" color={color} />
           ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.push("/(root)/(modals)/example");
+          },
         }}
       />
 

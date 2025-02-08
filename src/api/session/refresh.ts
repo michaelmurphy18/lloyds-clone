@@ -1,24 +1,20 @@
 import publicClient from "@/api/publicClient";
 
 const GetNewAccessToken = async (refreshToken: string) => {
-  try {
-    const accessToken: string = await publicClient
-      .get("session/refresh", {
-        headers: {
-          "x-fresh": refreshToken,
-        },
-      })
-      .then((res) => res.data.accessToken)
-      .catch((err) => {
-        throw new Error(err);
-      });
+  const accessToken: string = await publicClient
+    .get("session/refresh", {
+      headers: {
+        "x-refresh": refreshToken,
+      },
+    })
+    .then((res) => res.data.accessToken)
+    .catch((err) => {
+      console.log("Get New Access Token", err);
 
-    return accessToken;
-  } catch (error) {
-    console.log(error);
+      throw new Error(err);
+    });
 
-    return null;
-  }
+  return accessToken;
 };
 
 export default GetNewAccessToken;

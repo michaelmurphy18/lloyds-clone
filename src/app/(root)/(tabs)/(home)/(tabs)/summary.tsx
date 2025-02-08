@@ -3,19 +3,15 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { cn } from "@/libs/utils";
-import { AccountSummaryCard, RedirectBanner } from "@/components/cards";
+import { AccountSummaryCard, AdvertBanner } from "@/components/cards";
 import { CaughtUpIndicator } from "@/components/indicators";
 import { Spaces } from "@/constants";
-import { useQueryClient } from "@tanstack/react-query";
-import { GetAllAccountSchema } from "@/schema";
+import { useAccountsQuery } from "@/hooks";
 
 const SummaryScreen = () => {
-  const queryClient = useQueryClient();
-  const user = queryClient.getQueryData<{ id: string }>(["current-user"]);
-  const accounts = queryClient.getQueryData<GetAllAccountSchema>([
-    "accounts",
-    user?.id,
-  ]);
+  const {
+    accountsQuery: { accounts },
+  } = useAccountsQuery();
 
   return (
     <ScrollView
@@ -28,7 +24,7 @@ const SummaryScreen = () => {
       ))}
 
       {/* Credit Score Checker Banner */}
-      <RedirectBanner
+      <AdvertBanner
         title="Check your credit scrore"
         description="Congratulations - you've been registerd for Your Credit Score for a year"
         icon={require("@assets/images/icon.png")}
