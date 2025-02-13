@@ -1,64 +1,47 @@
-import { Header } from "@/components/headers";
-import { sortCodeFormatter } from "@/libs/utils";
-import { GetAccountSchema } from "@/schema";
+import { useAccountQuery } from "@/hooks";
+
+import LoadingOverlay from "@/screens/LoadingOverlay";
 import { Octicons } from "@expo/vector-icons";
-import { useQueryClient } from "@tanstack/react-query";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
 const Page = () => {
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
   const router = useRouter();
 
-  const queryClient = useQueryClient();
-  const data = queryClient.getQueryData<GetAccountSchema>([
-    "account",
-    accountId,
-  ]);
+  const { data, isPending, isError } = useAccountQuery(accountId);
 
-  const account = data?.account;
+  if (isPending) {
+    return <LoadingOverlay />;
+  }
 
-  if (!account) {
+  if (isError) {
     return null;
   }
 
   return (
     <View className="flex-1 bg-white py-5">
-      <Stack.Screen
-        options={{
-          title: "Classic", //get from api using account id
-          header: (props) => (
-            <Header showClose useSafeArea={false} {...props} />
-          ),
-        }}
-      />
-
       <View className="mx-3 gap-y-5 rounded-md border border-blue-600 bg-purple-100/50 p-4">
         <View className="gap-y-2">
           <View className="flex-row items-center justify-between">
             <Text className="text-sm">Sort Code</Text>
-            <Text className="font-bold">
-              {sortCodeFormatter(account.sortCode)}
-            </Text>
+            <Text className="font-bold">{data.account.sortCode}</Text>
           </View>
           <View className="flex-row items-center justify-between">
             <Text className="text-sm">Account Number</Text>
-            <Text className="font-bold">{account.accountNumber}</Text>
+            <Text className="font-bold">{data.account.accountNumber}</Text>
           </View>
         </View>
         <View className="my-1 h-px bg-gray-400" />
         <Link
-          href={{
-            pathname: "/details/send/[accountId]",
-            params: { accountId },
-          }}
+          href={`/details/send/${accountId}?title=${data.account.accountName}`}
           asChild
         >
           <Pressable
             onPress={() => router.dismiss()}
             className="flex-row items-center gap-x-3"
           >
-            <Octicons name="share" size={24} color="#000000" />
+            <Octicons name="share" size={20} color="#000000" />
             <Text className="font-semibold">Send Bank Details</Text>
           </Pressable>
         </Link>

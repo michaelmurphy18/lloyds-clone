@@ -3,15 +3,18 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { cn } from "@/libs/utils";
-import { AccountSummaryCard, AdvertBanner } from "@/components/cards";
+import { AccountSummary, AdvertBanner } from "@/components/cards";
 import { CaughtUpIndicator } from "@/components/indicators";
 import { Spaces } from "@/constants";
 import { useAccountsQuery } from "@/hooks";
 
 const SummaryScreen = () => {
-  const {
-    accountsQuery: { accounts },
-  } = useAccountsQuery();
+  const { userQuery } = useAccountsQuery();
+
+  if (userQuery.isPending || userQuery.isError) {
+    // TODO: Add error toast message
+    return null;
+  }
 
   return (
     <ScrollView
@@ -19,9 +22,10 @@ const SummaryScreen = () => {
       contentContainerClassName="gap-y-5 px-5 pt-5"
     >
       {/* Accounts Card*/}
-      {accounts?.map((account) => (
-        <AccountSummaryCard {...account} key={account.id} />
-      ))}
+      <AccountSummary.Cards
+        id={userQuery.data.id}
+        count={userQuery.data.accounts.length}
+      />
 
       {/* Credit Score Checker Banner */}
       <AdvertBanner

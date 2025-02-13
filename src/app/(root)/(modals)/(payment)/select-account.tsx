@@ -1,12 +1,12 @@
 import { GetAllAccount } from "@/api/account/main";
 import { GetCurrentUser } from "@/api/users/me";
-import { Header } from "@/components/headers";
 import { SkeletonLoader } from "@/components/ui";
 import { AccountQueryKey, UserQueryKey } from "@/libs/query-keys";
-import { formatCurrency, sortCodeFormatter } from "@/libs/utils";
+import { formatCurrency } from "@/libs/utils";
+import { usePaymentActions } from "@/store";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { Href, Link, Stack, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Suspense, useCallback } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -25,20 +25,6 @@ export default function Page() {
 
   return (
     <View className="flex-1 gap-y-4 px-4 pt-5">
-      <Stack.Screen
-        options={{
-          title: "Send money from",
-          header: (props) => (
-            <Header
-              {...props}
-              dismissTo="/(root)/(tabs)/(home)/(tabs)"
-              useSafeArea={false}
-              showBack
-              showClose
-            />
-          ),
-        }}
-      />
       <Suspense fallback={<CardSkeleton />}>
         <Card id={userId!} />
       </Suspense>
@@ -48,30 +34,21 @@ export default function Page() {
 
 const Card = ({ id }: { id: string }) => {
   const router = useRouter();
+  const { setAccount } = usePaymentActions();
 
-  const { data: accounts, isLoading } = useSuspenseQuery({
+  const { data: accounts } = useSuspenseQuery({
     queryKey: ["accounts", id],
     queryFn: GetAllAccount,
   });
 
   const getSelectedAccount = useCallback(
     (index: number) => {
-      const { id, balance, accountName, sortCode, accountNumber } =
-        accounts[index];
-
-      const query = JSON.stringify({
-        id,
-        balance,
-        accountName,
-        sortCode,
-        accountNumber,
-      });
+      setAccount(accounts[index]);
 
       router.back();
-      router.setParams({ query });
     },
 
-    [accounts, router],
+    [accounts, router, setAccount],
   );
 
   return accounts.map(
@@ -89,7 +66,7 @@ const Card = ({ id }: { id: string }) => {
         <View className="gap-y-1">
           <Text>{accountName}</Text>
           <Text className="text-sm text-gray-600">
-            {sortCodeFormatter(sortCode)} / {accountNumber}
+            {sortCode} / {accountNumber}
           </Text>
           <Text className="font-semibold">{formatCurrency(balance)}</Text>
         </View>

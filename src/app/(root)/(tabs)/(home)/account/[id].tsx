@@ -1,20 +1,16 @@
-import { GetAccount } from "@/api/account/main";
-import {
-  AccountSummary,
-  TransactionsFilterView,
-  TransactionsTabBar,
-  TransactionsViewPager,
-} from "@/components/Transactions";
+import { AccountSummary } from "@/components/Transactions";
 
 import { AnimatedHeader } from "@/components/headers";
-import { useAnimatedAccountScreen, useTransactions } from "@/hooks";
+import {
+  useAccountQuery,
+  useAnimatedAccountScreen,
+  useTransactions,
+} from "@/hooks";
 import { useLoadingScreen } from "@/store";
-import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { View, Text, Pressable } from "react-native";
-import { MaterialTabBar, Tabs } from "react-native-collapsible-tab-view";
+import { View, Text } from "react-native";
+import { Tabs } from "react-native-collapsible-tab-view";
 
 const Page = () => {
   const { id, name: accountName } = useLocalSearchParams<{
@@ -24,11 +20,7 @@ const Page = () => {
 
   const { setLoading } = useLoadingScreen();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["account", id],
-    queryFn: () => GetAccount(id),
-    // staleTime: 0,
-  });
+  const { data, isLoading } = useAccountQuery(id);
 
   useEffect(() => {
     setLoading(isLoading || !data);

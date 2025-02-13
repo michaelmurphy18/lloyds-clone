@@ -1,16 +1,14 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { Feather } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { CurrencyView } from "@/components";
-import { sortCodeFormatter } from "@/libs/utils";
-import { Button, SkeletonLoader } from "../ui";
-import { Account } from "@/schema";
 
-type AccountMainCardProps = {} & Pick<
-  Account,
-  "accountName" | "accountNumber" | "id" | "balance" | "sortCode"
->;
+import { Button, SkeletonLoader } from "../ui";
+import { Account, AccountBase } from "@/schema";
+import { usePaymentAccount, usePaymentActions } from "@/store";
+
+type AccountMainCardProps = {} & AccountBase;
 
 const Card = ({
   id,
@@ -19,15 +17,11 @@ const Card = ({
   accountName,
   accountNumber,
 }: AccountMainCardProps) => {
-  const sortCodeFormatted = sortCodeFormatter(sortCode);
+  const { setAccount } = usePaymentActions();
 
-  const query = JSON.stringify({
-    id,
-    balance,
-    accountName,
-    sortCode,
-    accountNumber,
-  });
+  const handleOnPress = useCallback(() => {
+    setAccount({ id, accountName, sortCode, accountNumber, balance });
+  }, [accountName, accountNumber, balance, id, setAccount, sortCode]);
 
   return (
     <View className="overflow-hidden rounded-xl bg-white">
@@ -35,7 +29,7 @@ const Card = ({
         <Pressable className="flex-row justify-between p-4 active:bg-black/10">
           <View>
             <Text className="font-semibold">{accountName}</Text>
-            <Text className="text-sm font-light">{`${sortCodeFormatted} / ${accountNumber}`}</Text>
+            <Text className="text-sm font-light">{`${sortCode} / ${accountNumber}`}</Text>
             <CurrencyView amount={balance} className="mt-2" />
           </View>
           <Button size="icon" variant="ghost" onPress={() => {}}>
@@ -44,8 +38,11 @@ const Card = ({
         </Pressable>
       </Link>
       <View className="flex-row overflow-hidden rounded-b-xl border-t border-gray-300">
-        <Link href={`/(root)/(modals)/(payment)?query=${query}`} asChild>
-          <Pressable className="flex-1 items-center py-4 active:bg-gray-200">
+        <Link href={`/(root)/(modals)/(payment)`} asChild>
+          <Pressable
+            onPress={handleOnPress}
+            className="flex-1 items-center py-4 active:bg-gray-200"
+          >
             <Text>Pay & Transfer</Text>
           </Pressable>
         </Link>

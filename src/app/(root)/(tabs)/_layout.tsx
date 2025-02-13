@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs, useRouter } from "expo-router";
 import { Header } from "@/components/headers";
 import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAccountsQuery } from "@/hooks";
+import { usePaymentActions } from "@/store";
+import { EventArg } from "@react-navigation/native";
 
 function TabBarIcon({
   size = 24,
@@ -19,6 +22,32 @@ function TabBarIcon({
 
 export default function TabLayout() {
   const router = useRouter();
+
+  const [enabled, setEnable] = useState(false);
+
+  const { accountsQuery } = useAccountsQuery({ accounts: { enabled } });
+  const { setAccount } = usePaymentActions();
+
+  const handleTabPress = useCallback(
+    (e: EventArg<"tabPress", true, undefined>) => {
+      e.preventDefault();
+
+      setEnable(true);
+
+      if (!accountsQuery.isPending && !accountsQuery.isError) {
+        setAccount(accountsQuery.data[0]);
+      }
+
+      router.push("/(root)/(modals)/(payment)");
+    },
+    [
+      accountsQuery.data,
+      accountsQuery.isError,
+      accountsQuery.isPending,
+      router,
+      setAccount,
+    ],
+  );
 
   return (
     <Tabs
@@ -71,10 +100,7 @@ export default function TabLayout() {
           ),
         }}
         listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            router.push("/(root)/(modals)/(payment)");
-          },
+          tabPress: handleTabPress,
         }}
       />
 

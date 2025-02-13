@@ -1,24 +1,5 @@
-import { cn } from "@/libs/utils";
-import { TransactionTimeline } from "@/types";
-import { useCallback } from "react";
-import {
-  Dimensions,
-  FlatList,
-  Pressable,
-  StyleProp,
-  Text,
-  View,
-  ViewProps,
-  ViewStyle,
-} from "react-native";
-import Animated, {
-  SharedValue,
-  useAnimatedProps,
-  useAnimatedReaction,
-  useAnimatedRef,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
+import { Dimensions, StyleProp, ViewProps, ViewStyle } from "react-native";
+import Animated, { SharedValue } from "react-native-reanimated";
 
 import {
   Route,

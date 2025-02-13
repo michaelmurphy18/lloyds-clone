@@ -4,11 +4,7 @@ export const UserQueryKey = {
 
 export const AccountQueryKey = {
   userAccounts: (userId: string) => ["accounts", userId],
-  userAccount: (userId: string, accountId: string) => [
-    "account",
-    userId,
-    accountId,
-  ],
+  userAccount: (accountId: string) => ["account", accountId],
   otherAccounts: (userId: string) => ["other-accounts", userId],
   otherAccount: (userId: string, accountId: string) => [
     "other-account",

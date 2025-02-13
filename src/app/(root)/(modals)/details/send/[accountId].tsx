@@ -1,57 +1,26 @@
 import { Header } from "@/components/headers";
-import { sortCodeFormatter } from "@/libs/utils";
-import { GetAccountSchema } from "@/schema";
+import { useAccountQuery } from "@/hooks";
 import { Ionicons, Octicons } from "@expo/vector-icons";
-import { useQueryClient } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 
 const Page = () => {
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
-  const [isLoading, setIsloading] = useState(true);
 
-  const queryClient = useQueryClient();
-  const account = queryClient.getQueryData<GetAccountSchema>([
-    "account",
-    accountId,
-  ]);
+  const query = useAccountQuery(accountId);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setIsloading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  if (isLoading || !account) {
+  if (query.isPending || query.isError) {
     return (
       <View className="flex-1 items-center justify-center">
-        <Stack.Screen
-          options={{
-            title: "Send bank details", //get from api using account id
-            header: (props) => (
-              <Header showClose useSafeArea={false} {...props} />
-            ),
-          }}
-        />
         <ActivityIndicator size="large" />
       </View>
     );
   }
 
+  const account = query.data.account;
+
   return (
     <View className="flex-1 gap-y-5 bg-white py-5">
-      <Stack.Screen
-        options={{
-          title: "Send bank details", //get from api using account id
-          header: (props) => (
-            <Header showClose useSafeArea={false} {...props} />
-          ),
-        }}
-      />
-
       <View className="mx-3 flex-row items-center gap-x-3 rounded-lg bg-[#f0f0f0] p-3">
         <Ionicons name="lock-closed-outline" size={20} color="black" />
         <Text className="text-sm">
@@ -61,7 +30,7 @@ const Page = () => {
 
       <BankDetailsCard
         type="local"
-        sortCode={sortCodeFormatter(account.sortCode)}
+        sortCode={account.sortCode}
         accountNumber={account.accountNumber}
         holderName={account.nameOnAccount}
       />

@@ -5,10 +5,6 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useCallback, useState } from "react";
 import { useAuth } from "@/store";
 import { Redirect } from "expo-router";
-import { GetCurrentUser } from "@/api/users/me";
-import { useQuery } from "@tanstack/react-query";
-import { GetAllAccount } from "@/api/account/main";
-import { UserQueryKey } from "@/libs/query-keys";
 import { useAccountsQuery } from "@/hooks";
 
 export const SplashScreen = ({ imageUri }: { imageUri: string }) => {

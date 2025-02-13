@@ -1,16 +1,13 @@
-import { GetCurrentUser } from "@/api/users/me";
 import { Header } from "@/components/headers";
-import { UserQueryKey } from "@/libs/query-keys";
+import { useUserQuery } from "@/hooks";
 import { getGreetings } from "@/libs/utils";
-import { useQuery } from "@tanstack/react-query";
 import { Stack, useGlobalSearchParams } from "expo-router";
+import { useMemo } from "react";
 
 export default function HomeLayout() {
-  const { data: fullName } = useQuery({
-    queryKey: UserQueryKey.currentUser,
-    queryFn: GetCurrentUser,
-    select: (res) => res.fullName,
-  });
+  const query = useUserQuery();
+  const fullName = query.data?.fullName ?? "User";
+  const greetings = useMemo(getGreetings, [fullName]);
 
   const glob = useGlobalSearchParams<{ id: string; name: string }>();
 
@@ -24,7 +21,7 @@ export default function HomeLayout() {
               showMessage
               showSupport
               showUser
-              title={`${getGreetings()}, ${fullName}`}
+              title={`${greetings}, ${fullName}`}
               {...props}
             />
           ),

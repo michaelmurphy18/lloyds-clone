@@ -32,7 +32,7 @@ const ViewPINScreen = () => {
       <Link
         asChild
         href={{
-          pathname: "/(modals)/reveal-pin/[card]",
+          pathname: "/reveal-pin/[card]",
           params: { card: selectedPage },
         }}
       >
@@ -72,7 +72,7 @@ const TimeoutError = () => {
       }, 10000); // shows the error for 10 seconds
     }
     return () => clearTimeout(timeoutId);
-  }, [timeout]);
+  }, [router, timeout]);
 
   if (!showError) return null;
 

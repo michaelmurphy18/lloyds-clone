@@ -49,7 +49,7 @@ const greetings = ["Good Morning", "Good Afternoon", "Good Evening"];
 export function getGreetings() {
   const currentHour = new Date().getHours();
 
-  const isHi = Math.random() < 0.2;
+  const isHi = Math.random() < 0.2 && Math.random() > 0.15;
 
   if (isHi) {
     return "Hi";

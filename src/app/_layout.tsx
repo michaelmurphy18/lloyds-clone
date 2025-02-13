@@ -7,7 +7,7 @@ import "../global.css";
 import LoadingOverlay from "@/screens/LoadingOverlay";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
-import { Suspense } from "react";
+import { StatusBar } from "expo-status-bar";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -20,7 +20,7 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,
+      // staleTime: 5 * 60 * 1000,
     },
   },
 });
@@ -32,6 +32,7 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView>
         <Slot />
+        <StatusBar style="dark" />
         <LoadingOverlay />
         <ErrorToast />
       </GestureHandlerRootView>

@@ -6,20 +6,18 @@ import {
 } from "@/components/cards";
 import { useAccountsQuery } from "@/hooks";
 import { Image } from "expo-image";
-import { Href, Link, Redirect } from "expo-router";
+import { Href, Link } from "expo-router";
 import { Pressable, ScrollView, Text, View } from "react-native";
 
 const EverydayScreen = () => {
-  const {
-    userQuery: { user },
-  } = useAccountsQuery();
+  const { userQuery } = useAccountsQuery();
 
-  if (!user) {
+  if (userQuery.isPending || userQuery.isError) {
     // TODO: Add error toast message
-    return <Redirect href="/(auth)" />;
+    return null;
   }
 
-  const count = user.accounts.length;
+  const count = userQuery.data.accounts.length;
   return (
     <ScrollView
       automaticallyAdjustContentInsets
@@ -27,7 +25,7 @@ const EverydayScreen = () => {
     >
       <Text className="text-lg font-semibold">Current accounts</Text>
 
-      <Accounts id={user.id} count={count} />
+      <Accounts id={userQuery.data.id} count={count} />
 
       {/* add other accounts */}
       <OtherAccountCard />
@@ -130,13 +128,11 @@ const GridItem = ({ label, caption, icon, href }: GridItemProps) => {
 };
 
 const Accounts = ({ id, count }: { id: string; count: number }) => {
-  const {
-    accountsQuery: { accounts, isLoading },
-  } = useAccountsQuery({
+  const { accountsQuery } = useAccountsQuery({
     id,
   });
 
-  if (!accounts || isLoading) {
+  if (accountsQuery.isPending || accountsQuery.isError) {
     return Array.from({ length: count }).map((_, index) => (
       <AccountMain.Skeleton key={index} />
     ));
@@ -144,7 +140,7 @@ const Accounts = ({ id, count }: { id: string; count: number }) => {
 
   return (
     <>
-      {accounts?.map((account) => (
+      {accountsQuery.data?.map((account) => (
         <AccountMain.Card key={account.id} {...account} />
       ))}
     </>

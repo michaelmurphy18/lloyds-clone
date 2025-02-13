@@ -8,12 +8,16 @@ import { Account } from "@/schema";
 
 // { id, availableBalance, overdraftLimit, ...props }
 
-type AccountSummaryProps = Pick<Account, "balance" | "overdraftLimit" | "id">;
+type AccountSummaryProps = Pick<
+  Account,
+  "balance" | "overdraftLimit" | "id" | "accountName"
+>;
 
 const AccountSummary = ({
   id,
   balance,
   overdraftLimit,
+  accountName,
   ...props
 }: AccountSummaryProps) => {
   return (
@@ -42,13 +46,7 @@ const AccountSummary = ({
           </Pressable>
         </Link>
 
-        <Link
-          asChild
-          href={{
-            pathname: "/details/[accountId]",
-            params: { accountId: id },
-          }}
-        >
+        <Link asChild href={`/details/${id}?title=${accountName}`}>
           <Pressable className="items-center gap-y-3 rounded-lg p-2 active:bg-black/10">
             <FontAwesome6 name="building-columns" size={20} color="black" />
             <Text className="text-sm">Account details</Text>

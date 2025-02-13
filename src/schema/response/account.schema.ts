@@ -1,3 +1,4 @@
+import { sortCodeFormatter } from "@/libs/utils";
 import { z } from "zod";
 
 export const accountSchema = z.object({
@@ -10,7 +11,7 @@ export const accountSchema = z.object({
   balance: z.number(),
   accountNumber: z.string(),
   accountName: z.string(),
-  sortCode: z.string(),
+  sortCode: z.string().transform(sortCodeFormatter),
   iban: z.string(),
   bic: z.string(),
   id: z.string(),
@@ -38,4 +39,10 @@ const getAllAccountSchema = z.array(
 
 type GetAllAccountSchema = z.infer<typeof getAllAccountSchema>;
 
-export { getAllAccountSchema, type GetAllAccountSchema };
+export { getAllAccountSchema };
+export type { GetAllAccountSchema };
+
+export type AccountBase = Pick<
+  Account,
+  "accountName" | "accountNumber" | "balance" | "id" | "sortCode"
+>;
