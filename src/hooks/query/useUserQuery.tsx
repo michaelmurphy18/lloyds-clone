@@ -1,4 +1,4 @@
-import { GetCurrentUser } from "@/api/users/me";
+import { getCurrentUser } from "@/api/users/me";
 import { UserQueryKey } from "@/libs/query-keys";
 import { NotifyOnChangeProps, useQuery } from "@tanstack/react-query";
 
@@ -10,7 +10,7 @@ export type UseUserQueryOptions = {
 const useUserQuery = (options?: UseUserQueryOptions) => {
   return useQuery({
     queryKey: UserQueryKey.currentUser,
-    queryFn: GetCurrentUser,
+    queryFn: getCurrentUser,
     ...options,
   });
 };

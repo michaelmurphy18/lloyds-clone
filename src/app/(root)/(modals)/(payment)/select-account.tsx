@@ -1,5 +1,5 @@
 import { GetAllAccount } from "@/api/account/main";
-import { GetCurrentUser } from "@/api/users/me";
+import { getCurrentUser } from "@/api/users/me";
 import { SkeletonLoader } from "@/components/ui";
 import { AccountQueryKey, UserQueryKey } from "@/libs/query-keys";
 import { formatCurrency } from "@/libs/utils";
@@ -13,7 +13,7 @@ import { Pressable, Text, View } from "react-native";
 export default function Page() {
   const { data: userId } = useQuery({
     queryKey: UserQueryKey.currentUser,
-    queryFn: GetCurrentUser,
+    queryFn: getCurrentUser,
     select: (res) => res.id,
   });
 
