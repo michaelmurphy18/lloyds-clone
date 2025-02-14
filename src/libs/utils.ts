@@ -63,3 +63,34 @@ export function getGreetings() {
     return greetings[2]; // "Good Evening"
   }
 }
+
+export function groupedAlphabetically<T>(
+  items: T[],
+  keyExtractor: (item: T) => string,
+  searchText?: string,
+) {
+  const lowerSearchText = searchText?.toLowerCase();
+
+  const groupedMap = items.reduce<Map<string, T[]>>((acc, item) => {
+    const key = keyExtractor(item);
+
+    if (lowerSearchText && !key.toLowerCase().includes(lowerSearchText))
+      return acc;
+
+    const firstLetter = key.charAt(0).toUpperCase();
+
+    if (!acc.has(firstLetter)) {
+      acc.set(firstLetter, []);
+    }
+
+    acc.get(firstLetter)!.push(item);
+
+    return acc;
+  }, new Map());
+
+  const groupedArray = Array.from(groupedMap.entries()).flatMap(
+    ([letter, payees]) => [letter, ...payees],
+  );
+
+  return groupedArray;
+}

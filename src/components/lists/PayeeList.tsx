@@ -11,38 +11,7 @@ import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button } from "../ui";
 import { Feather } from "@expo/vector-icons";
-
-/**
- * Group payees alphabetically by first letter, while filtering out payees that
- * don't match the given search text.
- *
- * @param payees The list of payees to group and filter.
- * @param searchText The search text to filter payees by.
- * @returns An array of strings and payees, where each string is a letter and the
- * payees that follow it are the ones whose name starts with that letter.
- */
-function groupedAlphabetically(
-  payees: GetPayees["payees"],
-  searchText: string,
-) {
-  const lowerSearchText = searchText.toLowerCase();
-
-  const groupedMap = payees.reduce<Map<string, Payee[]>>((acc, payee) => {
-    if (!payee.name.toLowerCase().includes(lowerSearchText)) return acc;
-    const firstLetter = payee.name.charAt(0).toUpperCase();
-    if (!acc.has(firstLetter)) {
-      acc.set(firstLetter, []);
-    }
-    acc.get(firstLetter)!.push(payee);
-    return acc;
-  }, new Map());
-
-  const groupedArray = Array.from(groupedMap.entries()).flatMap(
-    ([letter, payees]) => [letter, ...payees],
-  );
-
-  return groupedArray;
-}
+import { groupedAlphabetically } from "@/libs/utils";
 
 type PayeeOrLabel = Payee | string;
 
@@ -61,7 +30,7 @@ const PayeeList = ({
   const { bottom } = useSafeAreaInsets();
   const searchText = usePayeeSearch();
   const filteredPayee = useMemo(
-    () => groupedAlphabetically(payees, searchText),
+    () => groupedAlphabetically(payees, (payee) => payee.name, searchText),
     [payees, searchText],
   );
 
