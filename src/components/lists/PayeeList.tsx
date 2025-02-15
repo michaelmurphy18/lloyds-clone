@@ -1,5 +1,5 @@
 import { GetPayees, Payee } from "@/schema";
-import { usePayeeSearch } from "@/store";
+import { usePayeeSearch, usePaymentActions } from "@/store";
 import {
   FlashList,
   FlashListProps,
@@ -65,6 +65,7 @@ export default PayeeList;
 
 const PayeeListItem = memo(({ item }: ListRenderItemInfo<PayeeOrLabel>) => {
   const searchText = usePayeeSearch();
+  const { setPayee } = usePaymentActions();
 
   if (typeof item === "string") {
     return <Text className="px-4 py-4 font-semibold">{item}</Text>;
@@ -79,7 +80,10 @@ const PayeeListItem = memo(({ item }: ListRenderItemInfo<PayeeOrLabel>) => {
 
     return (
       <Link href={`/(root)/(modals)/(payment)/payment-details`} asChild>
-        <Pressable className="elevation-sm flex-row items-center gap-x-4 bg-white px-4 py-5 shadow-sm shadow-slate-700/10">
+        <Pressable
+          onPress={setPayee.bind(null, item)}
+          className="elevation-sm flex-row items-center gap-x-4 bg-white px-4 py-5 shadow-sm shadow-slate-700/10 active:bg-gray-200"
+        >
           <Feather name="user" size={28} color="#1b1b1b" />
           <View className="flex-1 flex-col gap-y-1">
             {indx < 0 ? (

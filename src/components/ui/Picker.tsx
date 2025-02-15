@@ -62,6 +62,7 @@ const Picker = <
             <RNPicker
               {...props}
               {...field}
+              itemStyle={{ color: "#000000" }}
               selectedValue={value}
               onValueChange={(_, itemIndex) => {
                 setSelectedIndex(itemIndex);

@@ -52,7 +52,6 @@ export default function Page() {
         <DataTimePicker
           control={control}
           name="dob"
-          display="spinner"
           defaultValue={MAXIMUM_DOB}
           maximumDate={MAXIMUM_DOB}
           label="Date of birth"

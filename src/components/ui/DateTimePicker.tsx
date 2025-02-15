@@ -3,7 +3,7 @@ import RNDateTimePicker, {
   DatePickerOptions,
 } from "@react-native-community/datetimepicker";
 import { PropsWithChildren, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { KeyboardAccessoryModal } from "./KeyboardAccessoryModal";
@@ -56,11 +56,13 @@ const DataTimePicker = <T extends FieldValues>({
               }}
             >
               <RNDateTimePicker
-                style={{ alignSelf: "center" }}
+                {...field}
                 {...props}
+                display="spinner"
+                textColor="#000000"
+                style={{ alignSelf: "center" }}
                 onChange={(e, date) => onChange(date)}
                 value={value}
-                {...field}
               />
             </KeyboardAccessoryModal>
           </>
