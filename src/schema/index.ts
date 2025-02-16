@@ -2,6 +2,7 @@
 export * from "./form/login.schema";
 export * from "./form/findId.schema";
 export * from "./form/findUser.schema";
+export * from "./form/createPayee.schema";
 
 // response
 export * from "./response/login.schema";

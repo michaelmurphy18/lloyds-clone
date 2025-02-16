@@ -30,6 +30,10 @@ export const sortCodeFormatter = (value: string) => {
   return formatted;
 };
 
+export const reverseSortCodeFormatter = (formattedValue: string) => {
+  return formattedValue.replace(/-/g, "");
+};
+
 export const formatDate = (
   date: Date,
   localisation?: string,

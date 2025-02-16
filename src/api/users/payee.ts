@@ -1,6 +1,7 @@
 import { validateSchema } from "@/libs/validator";
 import privateClient from "../privateClient";
 import { getPayeeSchema } from "@/schema/response/payee.schema";
+import { CreatePayeeForm } from "@/schema";
 
 export async function getPayees(
   name?: string,
@@ -29,14 +30,16 @@ export async function getPayees(
   return response;
 }
 
-export async function CreatePayee() {
-  const response = await privateClient().put("users/payee", {
-    name: "Alexandra Besquite",
-    sortCode: "348608",
-    accountNumber: "10492854",
-  });
+export async function createPayee(input: CreatePayeeForm) {
+  // const response = await privateClient().patch("users/payee", input);
+
+  console.log("Create Payee API Call");
+
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
+  return true;
 }
 
-export async function DeletePayee(id: string) {
+export async function deletePayee(id: string) {
   const response = await privateClient().delete(`users/payee/${id}`);
 }
