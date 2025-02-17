@@ -31,9 +31,11 @@ export async function getPayees(
 }
 
 export async function createPayee(input: CreatePayeeForm) {
-  // const response = await privateClient().patch("users/payee", input);
+  const response = await privateClient()
+    .patch("users/payee", input)
+    .then((res) => res.status === 200);
 
-  console.log("Create Payee API Call");
+  console.log("Create Payee API Call", response);
 
   await new Promise((resolve) => setTimeout(resolve, 5000));
 

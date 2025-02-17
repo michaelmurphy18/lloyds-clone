@@ -12,7 +12,7 @@ export default function LoadingOverlay() {
   return (
     <BlurView
       intensity={5}
-      className="absolute inset-0 flex-1 justify-center"
+      className="absolute inset-0 z-10 flex-1 justify-center"
       style={{
         backgroundColor: "hsla(0, 0%, 0%, 0.5)",
         paddingHorizontal: 20,

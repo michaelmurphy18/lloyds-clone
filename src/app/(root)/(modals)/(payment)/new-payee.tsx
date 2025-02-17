@@ -1,16 +1,15 @@
 import { createPayee } from "@/api/users/payee";
-import { Button, TextInput } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { InlineLabelTextInput } from "@/components/ui";
 import { sortCodeFormatter } from "@/libs/utils";
 import { CreatePayeeForm, createPayeeFormSchema } from "@/schema";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
-import { ErrorMessage } from "@hookform/error-message";
+import { LoadingScreen } from "@/screens/LoadingScreen";
+import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Checkbox from "expo-checkbox";
-import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Page() {
@@ -108,7 +107,7 @@ export default function Page() {
         </Text>
       </View>
 
-      {mutate.isPending && <ActivityIndicator />}
+      {/* {mutate.isPending && <ActivityIndicator />} */}
 
       <View className="flex-1" />
 
@@ -118,6 +117,8 @@ export default function Page() {
         size="lg"
         onPress={handleSubmit(onSubmit)}
       />
+
+      {mutate.isPending && <LoadingScreen />}
     </View>
   );
 }
