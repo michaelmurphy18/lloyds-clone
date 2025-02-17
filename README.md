@@ -2,6 +2,16 @@
 
 This project is a clone of the Lloyds banking application, built using React Native and TypeScript. It includes various features such as authentication, creating a new payee, viewing account details, and making payments.
 
+## Screenshots
+
+|                                                                  |                                                               |                                                                           |
+| :--------------------------------------------------------------: | :-----------------------------------------------------------: | :-----------------------------------------------------------------------: |
+| ![Home-Everyday](./screenshots/home-everyday.png) Home(Everyday) | ![Home-summary](./screenshots/home-summary.png) Home(Summary) | ![Settings-Profile](./screenshots/settings-profile.png) Settings(Profile) |
+|         ![Settings](./screenshots/settings.png) Settings         | ![Card Details](./screenshots/card-details.png) Card details  |             ![View Pin](./screenshots/view-pin.png) View pin              |
+|   ![Revealed Pin](./screenshots/revealed-pin.png) Revealed pin   |         ![Payment](./screenshots/payment.png) Payment         |    ![Select Payee](./screenshots/selecting-payee.png) Selecting payee     |
+
+More in the screenshot folder. [Screenshot](./screenshots/)
+
 ## Features
 
 - Authentiication
@@ -16,13 +26,22 @@ This project is a clone of the Lloyds banking application, built using React Nat
 - Expo Router
 - React Native
 - TypeScript
+- Nativewind
 - React Hook Form
 - Zod
 - Tanstack Query
 - Axios
 - TabView
 
-## Getting Started
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`API_KEY`
+
+`ANOTHER_API_KEY`
+
+## Getting started
 
 ### Prerequisites
 
@@ -68,3 +87,5 @@ This project is a clone of the Lloyds banking application, built using React Nat
 ## License
 
 This project is licensed under the MIT License.
+
+[MIT](https://choosealicense.com/licenses/mit/)
