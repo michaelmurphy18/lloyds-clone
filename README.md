@@ -33,14 +33,6 @@ More in the screenshot folder. [Screenshot](./screenshots/)
 - Axios
 - TabView
 
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
-
 ## Getting started
 
 ### Prerequisites
@@ -48,6 +40,16 @@ To run this project, you will need to add the following environment variables to
 - Node.js
 - pnpm
 - Expo CLI
+
+#### API Express Project
+
+Check out this repo to run the express server. ([Express API](https://github.com/amilmohd155/lloyds-clone-api))
+
+#### Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`EXPO_PUBLIC_API_URL` - http://localhost:1205 / http://IP:1205 where the express app mentioned above is running, if port was changed, make appropriate changes.
 
 ### Installation
 
