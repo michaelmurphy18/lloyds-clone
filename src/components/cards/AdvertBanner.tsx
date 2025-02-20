@@ -11,7 +11,6 @@ type AdvertBannerProps = {
   icon: string;
 } & ViewProps;
 
-// Todo: click to see credit score
 const AdvertBanner = ({
   title,
   description,

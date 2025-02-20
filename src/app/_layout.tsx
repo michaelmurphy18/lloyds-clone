@@ -8,6 +8,7 @@ import LoadingOverlay from "@/screens/LoadingOverlay";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useReactQueryDevTools } from "@dev-plugins/react-query";
 import { StatusBar } from "expo-status-bar";
+import { PortalProvider } from "@gorhom/portal";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -31,10 +32,12 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <GestureHandlerRootView>
-        <Slot />
-        <StatusBar style="dark" />
-        <LoadingOverlay />
-        <ErrorToast />
+        <PortalProvider>
+          <Slot />
+          <StatusBar style="dark" />
+          <LoadingOverlay />
+          <ErrorToast />
+        </PortalProvider>
       </GestureHandlerRootView>
     </QueryClientProvider>
   );

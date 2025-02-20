@@ -1,15 +1,67 @@
+import { createTransaction } from "@/api/transaction";
 import { PaymentAccount } from "@/components/cards";
-import { Button } from "@/components/ui";
-import { usePayee, usePaymentAccount } from "@/store";
+import { Button, InlineLabelTextInput } from "@/components/ui";
+import { TransactionType } from "@/constants/transactions";
+import { usePayee, usePaymentAccount, usePaymentActions } from "@/store";
 import { Feather, FontAwesome } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Link, useRouter } from "expo-router";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { z } from "zod";
+
+const createTransactionFormSchema = (balance?: number) =>
+  z.object({
+    amount: z.coerce
+      .number()
+      .positive()
+      .gte(10, "Minimum amount is £10")
+      .lte(balance ?? Infinity, "Insufficient funds"),
+    ref: z.string().optional(),
+  });
+
+type CreateTransactionForm = z.infer<
+  ReturnType<typeof createTransactionFormSchema>
+>;
 
 export default function Page() {
+  const router = useRouter();
+
   const account = usePaymentAccount();
   const payee = usePayee();
+  const { setTransaction } = usePaymentActions();
+
   const { bottom } = useSafeAreaInsets();
+
+  const mutate = useMutation({
+    mutationFn: createTransaction,
+    onSuccess: (data) => {
+      setTransaction(data);
+      router.push("/success");
+    },
+  });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<CreateTransactionForm>({
+    resolver: zodResolver(createTransactionFormSchema(account?.balance)),
+    reValidateMode: "onChange",
+    mode: "onChange",
+    criteriaMode: "all",
+  });
+
+  const onSubmit: SubmitHandler<CreateTransactionForm> = (data) => {
+    mutate.mutate({
+      amount: -data.amount, // Negative amount for outgoing transaction
+      ref: data.ref,
+      accountId: account?.id,
+      accountName: payee?.name,
+    });
+  };
 
   return (
     <View
@@ -45,14 +97,14 @@ export default function Page() {
 
       <View className="gap-y-4 rounded-xl bg-white px-4 py-5">
         <View>
-          <View className="flex-row items-center gap-x-3 rounded-xl border px-4">
-            <Text>Amount:</Text>
-            <TextInput
-              className="flex-1 py-4"
-              numberOfLines={1}
-              keyboardType="numeric"
-            />
-          </View>
+          <InlineLabelTextInput
+            label="Amount: "
+            control={control}
+            name="amount"
+            numberOfLines={1}
+            keyboardType="numeric"
+          />
+
           <Link href="/" asChild>
             <Button
               label="View payment limits"
@@ -63,15 +115,23 @@ export default function Page() {
             />
           </Link>
         </View>
-        <View className="flex-row items-center gap-x-3 rounded-xl border px-4">
-          <Text>Ref:</Text>
-          <TextInput className="flex-1 py-4" numberOfLines={1} maxLength={10} />
-        </View>
+        <InlineLabelTextInput
+          label="Ref:"
+          maxLength={10}
+          numberOfLines={1}
+          control={control}
+          name="ref"
+        />
       </View>
 
       <View className="flex-1" />
 
-      <Button label="Continue" size="lg" />
+      <Button
+        label="Continue"
+        size="lg"
+        onPress={handleSubmit(onSubmit)}
+        disabled={!isValid}
+      />
     </View>
   );
 }

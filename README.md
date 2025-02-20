@@ -40,6 +40,7 @@ More in the screenshot folder. [Screenshot](./screenshots/)
 - Node.js
 - pnpm
 - Expo CLI
+- [Lloyds API Clone](https://github.com/amilmohd155/lloyds-clone-api)
 
 #### API Express Project
 

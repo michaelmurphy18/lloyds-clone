@@ -26,3 +26,7 @@ export const CardQueryKey = {
   userCards: (userId: string) => ["cards", userId],
   userCard: (userId: string, cardId: string) => ["card", userId, cardId],
 };
+
+export const PayeeQueryKey = {
+  payees: ["payees"],
+};

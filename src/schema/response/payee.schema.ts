@@ -1,7 +1,7 @@
 import { sortCodeFormatter } from "@/libs/utils";
 import { z } from "zod";
 
-const payeeSchema = z
+export const payeeSchema = z
   .object({
     _id: z.string(),
     name: z.string(),

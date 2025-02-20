@@ -59,6 +59,20 @@ export default function Layout() {
           ),
         }}
       />
+      <Stack.Screen
+        name="success"
+        options={{
+          title: "Payment sent",
+          header: (props) => (
+            <Header
+              useSafeArea={false}
+              showClose
+              dismissTo="/(root)/(tabs)/(home)/(tabs)"
+              {...props}
+            />
+          ),
+        }}
+      />
     </Stack>
   );
 }

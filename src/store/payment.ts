@@ -1,4 +1,4 @@
-import type { AccountBase, Payee } from "@/schema";
+import type { AccountBase, Payee, Transaction } from "@/schema";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 
@@ -7,13 +7,24 @@ const usePaymentStore = create(
     {
       searchText: "",
       account: null as AccountBase | null,
-      payee: null as Payee | null,
+      payee: null as (Payee & { newEntry: boolean }) | null,
+      details: null as { amount: number; ref?: string } | null,
+      transaction: null as Transaction | null,
     },
     (set) => ({
       setSearchText: (text: string) =>
         set({ searchText: text.trim().toLowerCase() }),
       setAccount: (account: AccountBase) => set({ account }),
-      setPayee: (payee: Payee) => set({ payee }),
+      setPayee: (payee: Payee & { newEntry?: boolean }) =>
+        set({
+          payee: {
+            ...payee,
+            newEntry: payee.newEntry ?? false,
+          },
+        }),
+      setDetails: (details: { amount: number; ref?: string }) =>
+        set({ details }),
+      setTransaction: (transaction: Transaction) => set({ transaction }),
     }),
   ),
 );
@@ -26,8 +37,16 @@ export const usePaymentAccount = () =>
 
 export const usePayee = () => usePaymentStore((state) => state.payee);
 
+export const usePaymentDetails = () =>
+  usePaymentStore((state) => state.details);
+
+export const useTransaction = () =>
+  usePaymentStore((state) => state.transaction);
+
 export const usePaymentActions = () => ({
   setSearchText: usePaymentStore.getState().setSearchText,
   setAccount: usePaymentStore.getState().setAccount,
   setPayee: usePaymentStore.getState().setPayee,
+  setPaymentDetails: usePaymentStore.getState().setDetails,
+  setTransaction: usePaymentStore.getState().setTransaction,
 });

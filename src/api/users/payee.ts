@@ -1,6 +1,6 @@
 import { validateSchema } from "@/libs/validator";
 import privateClient from "../privateClient";
-import { getPayeeSchema } from "@/schema/response/payee.schema";
+import { getPayeeSchema, payeeSchema } from "@/schema/response/payee.schema";
 import { CreatePayeeForm } from "@/schema";
 
 export async function getPayees(
@@ -33,13 +33,17 @@ export async function getPayees(
 export async function createPayee(input: CreatePayeeForm) {
   const response = await privateClient()
     .patch("users/payee", input)
-    .then((res) => res.status === 200);
+    .then((res) =>
+      validateSchema({
+        schema: payeeSchema,
+        dto: res.data,
+        schemaName: res.request.url,
+      }),
+    );
 
-  console.log("Create Payee API Call", response);
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-
-  return true;
+  return response;
 }
 
 export async function deletePayee(id: string) {

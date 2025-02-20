@@ -1,5 +1,6 @@
 import { getPayees } from "@/api/users/payee";
 import { PayeeList, PayeeEmptyView } from "@/components";
+import { PayeeQueryKey } from "@/libs/query-keys";
 import { GetPayees } from "@/schema";
 import { usePaymentActions } from "@/store";
 import { EvilIcons, Feather } from "@expo/vector-icons";
@@ -24,7 +25,7 @@ export default function Page() {
     isFetching,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ["payees"],
+    queryKey: PayeeQueryKey.payees,
     queryFn: ({ pageParam }) => getPayees(pageParam?.name, pageParam?.id, 10),
     initialPageParam: null as GetPayees["nextCursor"],
     getNextPageParam: (lastPage) => lastPage.nextCursor,
